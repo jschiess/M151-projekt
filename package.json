@@ -1,0 +1,19 @@
+{
+  "name": "quiz-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "repl": "node -e \"let knex = require('./knex/knex.js')\" --experimental-repl-await -i"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "express": "^4.16.4",
+    "knex": "^0.16.3",
+    "pg": "^7.8.1",
+    "sqlite3": "^4.0.6"
+  }
+}
