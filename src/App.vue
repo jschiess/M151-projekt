@@ -8,6 +8,9 @@
         <span class="font-weight-light"> Quiz </span>
         </h1>
       </v-toolbar-title>
+      <v-toolbar-items>
+        <v-btn color="secondary" flat disabled>informatik Abteilung</v-btn>
+      </v-toolbar-items>
       <v-spacer></v-spacer>
       <h1 class="display-1 font-weight-light">www.tfbern.ch </h1>
 
@@ -54,16 +57,16 @@ import Score from './components/Score'
 
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     Start,
     Score
   },
-  data () {
+  data() {
     return {
       value: true
       
     }
   }
-}
+};
 </script>
