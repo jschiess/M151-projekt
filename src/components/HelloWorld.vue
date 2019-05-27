@@ -1,85 +1,59 @@
 <template>
-  <v-container >
-    <v-layout row wrap>
-      <v-flex >
-        <v-text-field
-        v-model="kek"
-        ></v-text-field>
+  <v-container row>
+    <v-layout row>
+      <v-flex>
+        <v-flex d-inline-flex>
+          <v-select :items="abteilung" v-model="value" label="Department"></v-select>
+          
+          <v-text-field name="name" placeholder="search" id="id"></v-text-field>
+        </v-flex>
 
-
-        <!-- <v-data-table
-          :items="items"
+        <v-data-table
+          :items="products.items"
+          :headers="products.headers"
           hide-actions
           class="elevation-1"
         >
-          <template slot="items" slot-scope="props">
-            <td>{{ props.item.key }}</td>
-            <td class="text-xs-right">{{ props.item }}</td>
-            <td class="text-xs-right">{{ props.item }}</td>
-            <td class="text-xs-right">{{ props.item }}</td>
-            <td class="text-xs-right">{{ props.item }}</td>
+          <template v-slot:headers="props">
+            <tr>
+              <th v-for="header in props.headers" :key="header.text">{{ header }}</th>
+            </tr>
           </template>
-        </v-data-table> -->
 
-        {{ test }}
+          <template slot="items" slot-scope="props" class="pagination.descending">
+            <!-- <td>{{ props.item.key }}</td> -->
 
-
+            <td>{{ props.index }}</td>
+            <td class="text-xs-right">{{ props.item.name }}</td>
+            <td class="text-xs-right">{{ props.item.sort }}</td>
+            <!-- <td class="text-xs-right">{{ props.item.key }}</td>
+            <td class="text-xs-right">{{ props.item.key }}</td>
+            <td class="text-xs-right">{{ props.item.key }}</td>
+            <td class="text-xs-right">{{ props.item.key }}</td>-->
+          </template>
+        </v-data-table>
       </v-flex>
     </v-layout>
-    
   </v-container>
-
-        <!-- <qr-code 
-    v-bind:text="kek"
-    
-    size="500"
-    error-level="L">
-</qr-code> -->
 </template>
+
+  
 <script>
-import store from '../store'
-import Axios from 'axios'
-import { log } from 'util';
-
-
-async function getrequest() {
-        
-  
-  var getstuff = await Axios.get('http://localhost/user')
-
-  store.commit('update', getstuff.data)
-
-    Vue.set() 
-  
-  
-}
-// store.mutaions.kys()
-getrequest()
-
-
-
-let app = {
-  data () {
+export default {
+  methods: {},
+  data() {
     return {
-      // qr: qr,
-      kek: 'kek',
-      items: [
-        'kek',
-        'kek',
-        'kek',
-      ],
-      test: 'asdf'
+      abteilung: [
+        'Informatik',
+        'Sport',
+        'Naturwissenschaft',
+      ]
     }
   },
-  methods: {
-
-    kek: async function() {
-      this.test = 'kealsdkjflasdjf;lasd lkfdajvakdfgadg;ljfdgj'
-    
+  computed: {
+    products() {
+      return this.$store.state.products;
     }
-  },
-}
-
-export default app
-
+  }
+};
 </script>
