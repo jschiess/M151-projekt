@@ -31,8 +31,9 @@ exports.up = async function(knex, Promise) {
 };
 
 exports.down = async function(knex, Promise) {
-  await knex.schema.dropTable('user')
-  await knex.schema.dropTable('question')
   await knex.schema.dropTable('answer')
+  await knex.schema.dropTable('question')
   await knex.schema.dropTable('quiz')
+  await knex.schema.dropTable('user')
+
 };

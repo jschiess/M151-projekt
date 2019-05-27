@@ -33,10 +33,18 @@ exports.seed = async function(knex) {
     {id: 5, question_id: 2, answer: 'Fünf', is_correct: false},
     {id: 6, question_id: 2, answer: 'Unendlich viele', is_correct: false},
 
-    {id: 7, question_id: 5, answer: '117 m', is_correct: false},
-    {id: 8, question_id: 5, answer: '217 m', is_correct: true},
-    {id: 9, question_id: 5, answer: '317 m', is_correct: false},
-    {id: 10, question_id: 5, answer: '417 m', is_correct: false},
+    {id: 7, question_id: 3, answer: 'Creator von JS', is_correct: true},
+    {id: 8, question_id: 3, answer: 'Creator von PHP', is_correct: false},
+    {id: 9, question_id: 3, answer: 'Bundesrat', is_correct: false},
+    {id: 10, question_id: 3, answer: 'Musiker', is_correct: false},
+    
+    {id: 11, question_id: 4, answer: 'Ja', is_correct: true},
+    {id: 12, question_id: 4, answer: 'Nein', is_correct: false},
+
+    {id: 13, question_id: 5, answer: '117 m', is_correct: false},
+    {id: 14, question_id: 5, answer: '217 m', is_correct: true},
+    {id: 15, question_id: 5, answer: '317 m', is_correct: false},
+    {id: 16, question_id: 5, answer: '417 m', is_correct: false},
   ])
 
   await knex('user_answer').insert([
