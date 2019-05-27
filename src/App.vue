@@ -1,37 +1,68 @@
-<template>
-  <v-app>
-    <!-- <v-toolbar app>
+<template >
+  <v-app >
+    <v-toolbar  color="primary lighten-1" dark>
       <v-toolbar-title class="headline text-uppercase">
-        <span>Vuetify</span>
-        <span class="font-weight-light">MATERIAL DESIGN</span>
+        <h1>
+
+        <span>TFbern</span>
+        <span class="font-weight-light"> Quiz </span>
+        </h1>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn
-        flat
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-      >
-        <span class="mr-2">Latest Release</span>
-      </v-btn>
-    </v-toolbar> -->
+      <h1 class="display-1 font-weight-light">www.tfbern.ch </h1>
 
-    <v-content>
-      <HelloWorld/> 
-    </v-content>
+    </v-toolbar>
+
+    <v-tabs
+      v-model="value"
+      color="primary"
+      dark
+      slider-color="primary"
+    >
+      <v-tab ripple>
+        tabText
+      </v-tab>
+
+      <v-tab-item lazy>
+        <Start/>
+      </v-tab-item>
+      
+      <v-tab ripple>
+        this is tab
+      </v-tab>
+      
+      <v-tab-item lazy>
+        <Score/>
+      </v-tab-item>
+
+    </v-tabs>
+  <v-spacer></v-spacer>
+
+    
+
+  <v-footer  class="pa-3 primary lighten-3 " dark>
+    <v-spacer></v-spacer>
+    <div>&copy; {{ new Date().getFullYear() }}</div>
+  </v-footer>
   </v-app>
+  
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
-import './store'
+import Start from './components/Start'
+import Score from './components/Score'
+
+
 export default {
   name: 'App',
   components: {
-    HelloWorld,
+    Start,
+    Score
   },
   data () {
     return {
-      //
+      value: true
+      
     }
   }
 }

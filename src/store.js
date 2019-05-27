@@ -1,36 +1,38 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VueQRCodeComponent from 'vue-qrcode-component'
-import QrcodeVue from 'qrcode.vue';
+
 import Axios from 'axios';
-Vue.component('qrcode.vue', QrcodeVue)
+
 Vue.component('qr-code', VueQRCodeComponent)
 
 
 Vue.use(Vuex)
 
 
-var store = new Vuex.Store({
+export default new Vuex.Store({
   state: {
-    qr: 'asdfasldkfjals;dkfjal;sdjf',
-    tables: []
+    items: []
 
   },
+
+  // no asycn kek
   mutations: {
-    update: function(e) {
-      store.state.tables = e
-    }
-
+    add_item(state, el) {
+      
+      state.items = (el)
+    },
+    getitems: async function() {
+      
+      this.commit('add_item', await Axios.get('localhost:1337/user'))
+    },
   },
+
   actions: {
     
   },
-  getters: {
-    qr: () => {return store.state.fml},
-    
-    GET_users: async () => {return await Axios.get('localhost:1337/GET_users')}
-  }
+  
+
 })
 
 
-export default store
