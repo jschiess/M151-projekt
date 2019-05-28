@@ -31,11 +31,8 @@ module.exports = {
       max: 10
     },
     migrations: {
-      directory: 'knex/migrations'
-    },
-    seeds: {
-      directory: 'knex/seeds'
-    },
+      tableName: 'knex_migrations'
+    }
   },
 
   production: {
@@ -50,11 +47,8 @@ module.exports = {
       max: 10
     },
     migrations: {
-      directory: 'knex/migrations'
-    },
-    seeds: {
-      directory: 'knex/seeds'
-    },
+      tableName: 'knex_migrations'
+    }
   }
 
 };

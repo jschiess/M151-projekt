@@ -1,7 +1,6 @@
 {
   "name": "quiz-backend",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,8 +11,17 @@
   "dependencies": {
     "axios": "^0.18.0",
     "express": "^4.16.4",
-    "knex": "^0.16.3",
-    "pg": "^7.8.1",
-    "sqlite3": "^4.0.6"
-  }
+    "knex": "^0.16.5",
+    "pg": "^7.11.0",
+    "sqlite3": "^4.0.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HoloArcher/M151-projekt.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HoloArcher/M151-projekt/issues"
+  },
+  "homepage": "https://github.com/HoloArcher/M151-projekt#readme",
+  "description": ""
 }
