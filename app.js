@@ -57,27 +57,6 @@ app.get('/quiz/:id/questions', async(req, res) => {
             }
             result.push(resobj)
         }
-    
-                            /* if(answer.order = i){
-                                answerarr.push(answer.answer)
-                            }
-                            result.push(answerarr)
-                            i++
-                        
-                        } */
-                        /* queryresult = [
-                            {
-                                id: 1,
-                                question: "Frage?",
-                                answers:[
-                                    {answer1: "antwort1"},
-                                    {answer2: "antwort2"},
-                                    {answer3: "antwort3"},
-                                    {answer4: "antwort4"},
-                                ]
-                            }
-                        ]
-                            */
 
     res.send([result])
 
