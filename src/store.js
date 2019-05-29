@@ -4,6 +4,7 @@ import VueQRCodeComponent from 'vue-qrcode-component'
 
 import Axios from 'axios';
 
+
 Vue.component('qr-code', VueQRCodeComponent)
 
 
@@ -31,14 +32,12 @@ export default new Vuex.Store({
     menu: [
       { key: 'link 1', icon: "book", title: 'Filler' },
       { key: 'link 1', icon: "menu", title: 'Filler' },
-      { key: 'link 1', icon: "share", title: 'Filler' },
+      { key: 'link 1', icon: "share", title: 'Filler'},
     ],
     department: [
       {}
-    ], 
+    ],}, 
         
-
-       no asycn kek  
     mutations: {
   add_item(state, el) {
       
@@ -60,5 +59,3 @@ export default new Vuex.Store({
   },
   
 })
-
-

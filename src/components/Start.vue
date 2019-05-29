@@ -1,13 +1,18 @@
 <template>
-	<v-container grid-list-xl pt-5>
+	<v-container grid-list-xl>
 
       <v-layout wrap>
-        <v-flex xs12 ma-5>
-          
-        </v-flex>
+				<v-flex xs12>
+					<v-text-field
+						name="Link"
+						id="id"
+						v-model="value"
+					></v-text-field>
+				</v-flex>
         <v-flex d-flex>
           <span d-flex>
           </span>
+					
           <qrcode-vue :value="value" :size="size" level="H"> </qrcode-vue>
       
         </v-flex>

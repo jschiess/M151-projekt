@@ -3,7 +3,7 @@
       <v-layout column>
         <v-flex xl12 ma-3>
           <v-card color="primary">
-            s
+            
             
           </v-card>
         </v-flex>
@@ -27,17 +27,17 @@ export default {
   data() {
     return {
       value: true,
+      d: 56,
 	  chartData: [
-		  ["lol", "kek", "average", "idum"],
-		  ['lolq', Math.random()*10, 4, 1],
-		  ['nazdac', Math.random()*10, 1, 1],
-		  
+      ["user-1", "kek", "sm"],
+		  ['user-2', Math.random()*10, 5  ],
+		  ['user-3', Math.random()*10, 5 ],
 		  ],
 	  chartOptions: {
 		  title: 'title',
 		  vAxis: {title: ''},
 		  hAxis: {title: ''},
-      series: {2: {type: 'line'}},
+      series: {1: {type: 'line'}},
       
 	  }
     };
