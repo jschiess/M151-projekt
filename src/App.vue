@@ -7,6 +7,7 @@
 
 <script>
 
+import store from 'vuex'
 
 export default {
   name: "App",
@@ -26,8 +27,7 @@ export default {
         {text: 'number'},
         {text: 'play'},
       ]
-      
     }
-  }
+  },
 };
 </script>

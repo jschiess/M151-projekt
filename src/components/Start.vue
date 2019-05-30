@@ -34,7 +34,8 @@ export default {
 	},
 	data() {
 		return {
-			value: 'https://example.com',
+			value: 'http://192.168.0.150:8081/#/client',
+			value1: 'WIFI:S:Utopia;T:WPA2;P:Phil46ipP;;',
 			size: 500
 		}
 	}
