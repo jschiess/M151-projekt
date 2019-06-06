@@ -1,3 +1,9 @@
+/*
+TODO:
+    -Set /api before each /quiz
+
+*/
+
 const express = require('express')
 const knex = require('./knex/knex.js');
 
@@ -75,6 +81,13 @@ app.get('/api/quiz/:id/questions', async (req, res) => {
 })
 
 // Insert a quiz to the database if the quiz doesen't already exists
+/*
+Required:
+    {
+        "name": "thisisaquiz",
+    }
+
+*/
 app.post('/api/quiz', async (req, res) => {
     console.log(req.body.name)
     try {
@@ -88,10 +101,17 @@ app.post('/api/quiz', async (req, res) => {
 })
 
 // Intert user to the database
+/*
+Requierd:
+    {
+        "nick": "nickname",
+    }
+
+*/
 app.post('/api/quiz/user', async (req, res) => {
     console.log(req.body.name)
     try {
-        await knex('user').insert({"nick": req.body.nick, "created_at": Date.now(), "is_active": req.body.is_active,})
+        await knex('user').insert({"nick": req.body.nick, "created_at": Date.now(), "is_active": true})
         res.send('OK\n')
     } catch (err) {
         console.log(err)
@@ -107,6 +127,13 @@ app.put('/api/quiz/user/change_isactive', async (req, res) => {
 })
 
 // Insert the answers from the user for the question he solved
+/*
+Requiered:
+    {
+        idk: idc,
+    }
+
+*/
 app.post('/api/quiz/useranswer', async (req, res) => {
     
 })
