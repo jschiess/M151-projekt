@@ -36,7 +36,7 @@ app.get('/api/quiz/users', async (req, res) => {
 // Returns all quiz's in the database
 app.get('/api/quiz', async (req, res) => {
     result = await knex('quiz')
-        .select('*')
+                    .select('*')
     res.json(result)
     console.log(result)
 })
@@ -44,8 +44,8 @@ app.get('/api/quiz', async (req, res) => {
 // Returns a spqcific quiz from the database
 app.get('/api/quiz/:id', async (req, res) => {
     result = await knex('quiz')
-        .select('*')
-        .where('id', req.params.id)
+                    .select('*')
+                    .where('id', req.params.id)
     if (result.length === 0) {
         res.status(404)
         res.send('NOT FOUND!\n')
@@ -58,9 +58,9 @@ app.get('/api/quiz/:id', async (req, res) => {
 // Gives you all the questions and answers for a quiz
 app.get('/api/quiz/:id/questions', async (req, res) => {
     let queryresult = await knex('question')
-        .leftJoin('answer', 'question.id', 'answer.question_id')
-        .where('question.quiz_id', req.params.id)
-        .orderBy('question.order')
+                            .leftJoin('answer', 'question.id', 'answer.question_id')
+                            .where('question.quiz_id', req.params.id)
+                            .orderBy('question.order')
 
     let result = []
     let questions = await knex('question').select('question').where('question.quiz_id', req.params.id)
@@ -163,7 +163,18 @@ Requiered:
 
 */
 app.post('/api/quiz/useranswer', async (req, res) => {
-
+    try{
+        await knex('user_answer').insert({
+            "user_id": req.body.user_id,
+            "answer_id": req.body.answer_id,
+            "created_at": Date.now()
+        })
+        res.send('OK\n')
+    }catch(err){
+        console.log(err)
+        res.status(400)
+        res.send('FAIL\n')
+    }
 })
 
 // Change the name of a quiz if you want
