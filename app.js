@@ -37,6 +37,11 @@ app.get('/quiz/:id/questions', async(req, res) => {
     let result = []
     let questions = await knex('question').select('question').where('question.quiz_id', req.params.id)
 
+    if(queryresult.length === 0){
+        res.status(404)
+        res.send('NOT FOUND!\n')
+        return
+    }else{
         for(question of questions){
             let resobj = {
                 question: "",
@@ -58,30 +63,24 @@ app.get('/quiz/:id/questions', async(req, res) => {
             result.push(resobj)
         }
 
-    res.send([result])
+        res.send([result])
+    }
 
 })
 
 app.post('/quiz', async(req, res) => {
-    await knex('quiz').insert([
-        {name: req.body.name},
-    ]);
-    res.send('OK!')
+    console.log(req.body.name)
+    try {
+      await knex('quiz').insert(req.body)
+      res.send('OK\n')
+    } catch (err) {
+      console.log(err)
+      res.status(400)
+      res.send('FAIL\n')
+    }
 })
 
-app.delete('/quiz/:id', async (req, res) => {
-    let result = await knex('quiz').where({id: req.params.id})
-    if(result.length === 0) {
-        res.status(404)
-        res.send('NOT FOUND\n')
-        return
-    }
-    result = await knex('quiz')
-                .where({id: req.params.id})
-                .del()
-    console.log(result)
-    res.send('OK\n')
-})
+
 
 app.put('/quiz/:id', async(req, res) => {
     let result = await knex('quiz').where({id: req.params.id})
@@ -96,6 +95,20 @@ app.put('/quiz/:id', async(req, res) => {
         console.log(result)
         res.send('OK\n')
     }   
+})
+
+app.delete('/quiz/:id', async (req, res) => {
+        let result = await knex('quiz').where({id: req.params.id})
+        if(result.length === 0) {
+            res.status(404)
+            res.send('NOT FOUND\n')
+            return
+        }
+        result = await knex('quiz')
+                    .where({id: req.params.id})
+                    .del()
+        console.log(result)
+        res.send('OK\n')
 })
 
 app.listen(3000, () => console.log("Listening on port 3000"))
