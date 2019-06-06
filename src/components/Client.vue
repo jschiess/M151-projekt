@@ -4,23 +4,27 @@
     <template>
       <v-content>
         <v-container pa-0 fill-height fluid v-if="active">
-          <v-layout row wrap >
-			  <v-flex  xs12>
-				  <v-toolbar color="primary" dark hover large>
-
-					  <v-toolbar-title class="test-align-center" >
-						  <h1>{{ frage }}this is question</h1>
-					  </v-toolbar-title>
-					  
-				  </v-toolbar>
-				
-			  </v-flex>
-            <v-flex xs6 v-for="(item, n ) in obj" :key="item">
-              <v-card @click="meths[n]" flat v-bind:style="val[n]" id="box">
+          <v-layout row wrap>
+            <v-flex xs12>
+              <v-toolbar color="primary" dark hover large>
+                <v-toolbar-title class="test-align-center">
+                  <h1>{{ quiz[index].question }}</h1>
+                </v-toolbar-title>
+              </v-toolbar>
+            </v-flex>
+            <v-flex xs6 v-for="(item, n ) in quiz[index].answers" :key="n">
+              <v-card flat v-bind:style="val[n]" id="box" dark @click="index++">
                 <v-layout fill-height row wrap>
-                  <v-flex xs12 d-flex>
+                  <v-flex xs12 d-flex >
                     <v-spacer></v-spacer>
-                    <v-icon large dark>{{ obj[n] }}</v-icon>
+                    
+                    <!-- <v-icon large dark>{{ obj[n] }}</v-icon> -->
+                    <span d-flex>
+                    </span>
+                    <v-flex xs12>
+                      <h1>{{ item.answer}} </h1>
+                    </v-flex>
+                   
                     <v-spacer></v-spacer>
                   </v-flex>
                 </v-layout>
@@ -29,40 +33,41 @@
           </v-layout>
         </v-container>
 
-          <v-container fluid fill-height v-else>
-            <v-layout align-center justify-center>
-              <v-flex xs12 sm8 md4>
-                <v-card class="elevation-12">
-                  <v-card-text>
-                    <v-form>
-                      <v-text-field
-                        prepend-icon="person"
-                        name="Username"
-                        label="Username"
-                        type="text"
-                      ></v-text-field>
-                      <!-- <v-text-field id="password" prepend-icon="lock" name="password" label="Password" type="password"></v-text-field> -->
-                    </v-form>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn @click="active = true" color="primary">Go!</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-flex>
-            </v-layout>
-          </v-container>
-		  
+        <v-container fluid fill-height v-else>
+          <v-layout align-center justify-center>
+            <v-flex xs12 sm8 md4>
+              <v-card class="elevation-12">
+                <v-card-text>
+                  <v-text-field
+                    prepend-icon="person"
+                    name="Username"
+                    label="Username"
+                    type="text"
+                    v-model="user"
+                  ></v-text-field>
+                  <!-- <v-text-field id="password" prepend-icon="lock" name="password" label="Password" type="password"></v-text-field> -->
+                  <v-btn @click=" check_user()" color="primary">Go!</v-btn>
+                </v-card-text>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-container>
       </v-content>
     </template>
   </v-app>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
-      active: true,
+      active: false,
+      user: "testuser",
+      frage: "this is question",
+      quiz: {},
+      index: 0,
       obj: ["share", "pause", "stop", "thumb_up"],
       val: [
         {
@@ -81,13 +86,49 @@ export default {
     };
   },
   methods: {
-    meths: [
-      () => {
-        alert("test");
+    // checks if the username is alredy taken
+    async check_user() {
+      
+      let temp = await axios.get(`/api/quiz/users`);
+      var res = true;
+      temp.data.forEach(el => {
+        console.log(el.nick);
+        console.log(this.user);
+        if (el.nick == this.user) {
+          alert('Name schon genommen.')
+          res = false;
+        }
+      });
+
+      if (res) {
+        this.active = true;
+        // goes to the quiz
+
       }
-    ]
+    },
+    async POST_answer() {
+      var answer = {
+        user_id: 1,
+        answer_id: 1
+      };
+    },
+    async GET_question_answers() {}
+  },
+  async created() {
+    let temp = await axios.get(`/api/quiz/1/questions`);
+    console.log(temp.data[0])
+    this.quiz = temp.data[0]
   }
 };
+
+var test = [
+  {
+    nick: "",
+    richtge: 123
+  }
+];
+
+var userID = {};
 </script>
 
 

@@ -5,7 +5,6 @@ import store from './store'
 
 import router from './router'
 
-import Start from './components/Start.vue'
 
 
 

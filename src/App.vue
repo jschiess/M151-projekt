@@ -1,13 +1,13 @@
 <template>
   <div>
     <router-view></router-view>
-
   </div>
 </template>
 
 <script>
 
-import store from 'vuex'
+// import store from 'vuex'
+import axios from 'axios'
 
 export default {
   name: "App",
@@ -29,5 +29,10 @@ export default {
       ]
     }
   },
+  methods: {
+    async kek() {
+      let k = axios.get('/api/quiz')
+    }
+  }
 };
 </script>

@@ -27,35 +27,34 @@
         <Score/>
       </v-tab-item>
 
-      <v-tab>kek</v-tab>
+      <v-tab>Rangliste</v-tab>
       <v-tab-item>
         <v-container fluid justify-center>
-            <v-layout justify-center align-center>
-              <v-flex xs6>
-                <v-card>
-                  <v-layout row wrap>
-                    
-                  <v-flex xs6 v-for="user in users" :key="user">
-                   <h3>Users</h3>                 
+          <v-layout justify-center align-center>
+            <v-flex xs6>
+              <v-card dark>
+                <v-layout row wrap>
+                  <v-flex xs6>
+                    <h3>Users</h3>
                   </v-flex>
-                  <v-flex xs6 v-for="user in users" :key="user">
-                   <h3>Progress</h3>              
+                  <v-flex xs6>
+                    <h3>Progress</h3>
                   </v-flex>
-                  </v-layout>
+                </v-layout>
+              </v-card>
+              <v-card>
+                <v-layout row wrap v-for="(user, n ) in users" :key="n">
+                  <v-flex xs6 >
+                   <h3> {{ user.nick}} </h3>                 
+                  </v-flex>
+                  <v-flex xs6 >
+                   <h3> {{ user.correct }} </h3>              
+                  </v-flex>
+                </v-layout>
                 </v-card>
-                <v-card>
-                  <v-layout row wrap>
-                    
-                  <v-flex xs6 v-for="user in users" :key="user">
-                    {{ user.name }}                    
-                  </v-flex>
-                  <v-flex xs6 v-for="user in users" :key="user">
-                    {{ user.progress }}                    
-                  </v-flex>
-                  </v-layout>
-                </v-card>
-              </v-flex>
-            </v-layout>
+              
+            </v-flex>
+          </v-layout>
         </v-container>
       </v-tab-item>
     </v-tabs>
@@ -70,6 +69,18 @@
 <script>
 import Start from "./Start";
 import Score from "./Score";
+import axios from "axios";
+import Vue from 'vue'
+import { clearInterval } from 'timers';
+async function kek() {
+  
+
+  console.log(user.data);
+  //todo
+  return user.data;
+}
+
+
 
 export default {
   name: "App",
@@ -81,20 +92,30 @@ export default {
     return {
       value: 2,
       search: "",
-      items: [
-        { text: "itesm", key: 1, player: "holo" },
-        { text: "itesm", key: 2, player: "saba" },
-        { text: "itesm", key: 3, player: "sabr" },
-        { text: "itesm", key: 4, player: "archer" },
-        { text: "itesm", key: 5, player: "john" }
-      ],
-      headers: [{ text: "number" }, { text: "play" }]
+      users: []
     };
   },
   computed: {
-    users() {
-      return this.$store.state.users;
+    async refresh() {
+      let user = await axios.get("/api/quiz/users");
+      this.users = user.data
     }
+  },
+  async created() {
+    this.__interval = setInterval( async() => {
+      let user = await axios.get("/api/quiz/users");
+      Vue.set(this, 'users', user.data)
+        
+    }, 1000);
+  },
+  destroyed() {
+    clearInterval(this.__interval)
   }
+  
 };
+
+
+
+
+
 </script>

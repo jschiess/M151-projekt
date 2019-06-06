@@ -22,7 +22,8 @@ export default new Vuex.Store({
 
     tables: [],
     users: [
-      {name: 'holo', progress: 10}
+      {name: 'holo', progress: 10},
+      {name: 'hoslo', progress: 10},
     ],
     menu: [
       { key: 'link 1', icon: "book", title: 'Filler' },
