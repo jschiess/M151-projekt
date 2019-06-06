@@ -51,7 +51,7 @@ exports.seed = async function(knex) {
     {id: 1, user_id: 1, answer_id: 1, created_at: Date.now()},
     {id: 2, user_id: 1, answer_id: 4, created_at: Date.now()},
     {id: 3, user_id: 1, answer_id: 7, created_at: Date.now()},
-    {id: 4, user_id: 1, answer_id: 8, created_at: Date.now()},
+    {id: 4, user_id: 1, answer_id: 11, created_at: Date.now()},
     {id: 5, user_id: 2, answer_id: 2, created_at: Date.now()},
     {id: 6, user_id: 2, answer_id: 1, created_at: Date.now()},
     {id: 7, user_id: 2, answer_id: 10, created_at: Date.now()},

@@ -13,6 +13,26 @@ console.log('Willkomen zu unserem Quiz Backend!');
 
 app.use(express.json())
 
+app.get('/api/quiz/users', async (req, res) => {
+
+    let list = []
+    let user = knex('user').select('*')
+
+    let result = await knex('user')
+                        .join('user_answer', 'user.id', 'user_answer.user_id')
+                        .join('answer', 'user_answer.answer_id', 'answer.id')
+                        //.join('question', 'answer.question_id', 'question.id')
+
+                        .select('user.nick')
+                        .where('is_correct', 1)
+                        .count('answer.is_correct as correct')
+                        .groupBy('user.nick')
+
+    list.push(result)
+
+    res.send(result)
+})
+
 // Returns all quiz's in the database
 app.get('/api/quiz', async (req, res) => {
     result = await knex('quiz')
@@ -111,7 +131,11 @@ Requierd:
 app.post('/api/quiz/user', async (req, res) => {
     console.log(req.body.name)
     try {
-        await knex('user').insert({"nick": req.body.nick, "created_at": Date.now(), "is_active": true})
+        await knex('user').insert({
+            "nick": req.body.nick,
+            "created_at": Date.now(),
+            "is_active": true
+        })
         res.send('OK\n')
     } catch (err) {
         console.log(err)
@@ -122,7 +146,11 @@ app.post('/api/quiz/user', async (req, res) => {
 
 // Changes the atribute is_active from true to false
 app.put('/api/quiz/user/change_isactive', async (req, res) => {
-    await knex('user').where({is_active: true}).update({is_active: false})
+    await knex('user').where({
+        is_active: true
+    }).update({
+        is_active: false
+    })
     res.send('')
 })
 
@@ -130,12 +158,12 @@ app.put('/api/quiz/user/change_isactive', async (req, res) => {
 /*
 Requiered:
     {
-        idk: idc,
+        idk: idc, 
     }
 
 */
 app.post('/api/quiz/useranswer', async (req, res) => {
-    
+
 })
 
 // Change the name of a quiz if you want
