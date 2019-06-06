@@ -7,13 +7,16 @@ console.log('Willkomen zu unserem Quiz Backend!');
 
 app.use(express.json())
 
-app.get('/quiz', async (req, res) => {
+// Returns all quiz's in the database
+app.get('/api/quiz', async (req, res) => {
     result = await knex('quiz')
         .select('*')
     res.json(result)
     console.log(result)
 })
-app.get('/quiz/:id', async (req, res) => {
+
+// Returns a spqcific quiz from the database
+app.get('/api/quiz/:id', async (req, res) => {
     result = await knex('quiz')
         .select('*')
         .where('id', req.params.id)
@@ -26,13 +29,12 @@ app.get('/quiz/:id', async (req, res) => {
     }
 })
 
-app.get('/quiz/:id/questions', async (req, res) => {
+// Gives you all the questions and answers for a quiz
+app.get('/api/quiz/:id/questions', async (req, res) => {
     let queryresult = await knex('question')
         .leftJoin('answer', 'question.id', 'answer.question_id')
         .where('question.quiz_id', req.params.id)
         .orderBy('question.order')
-
-    // Pro frage ein Objekt //Liste für anwtworten
 
     let result = []
     let questions = await knex('question').select('question').where('question.quiz_id', req.params.id)
@@ -43,6 +45,8 @@ app.get('/quiz/:id/questions', async (req, res) => {
         return
     } else {
         for (question of questions) {
+
+            // For each question an object with the question and an array with the answers
             let resobj = {
                 question: "",
                 answers: [],
@@ -51,6 +55,8 @@ app.get('/quiz/:id/questions', async (req, res) => {
 
             for (answer of queryresult) {
                 if (answer.question === question.question) {
+
+                    // For each answer an object with the answer and the boolean if its true or false
                     ansobj = {
                         answer: "",
                         is_correct: true,
@@ -68,7 +74,8 @@ app.get('/quiz/:id/questions', async (req, res) => {
 
 })
 
-app.post('/quiz', async (req, res) => {
+// Insert a quiz to the database if the quiz doesen't already exists
+app.post('/api/quiz', async (req, res) => {
     console.log(req.body.name)
     try {
         await knex('quiz').insert(req.body)
@@ -80,10 +87,11 @@ app.post('/quiz', async (req, res) => {
     }
 })
 
-app.post('/quiz/user', async (req, res) => {
+// Intert user to the database
+app.post('/api/quiz/user', async (req, res) => {
     console.log(req.body.name)
     try {
-        await knex('user').insert(req.body)
+        await knex('user').insert({"nick": req.body.nick, "created_at": Date.now(), "is_active": req.body.is_active,})
         res.send('OK\n')
     } catch (err) {
         console.log(err)
@@ -92,13 +100,20 @@ app.post('/quiz/user', async (req, res) => {
     }
 })
 
-app.put('/quiz/user/isactive')
+// Changes the atribute is_active from true to false
+app.put('/api/quiz/user/change_isactive', async (req, res) => {
+    await knex('user').where({is_active: true}).update({is_active: false})
+    res.send('')
+})
 
-app.post('/quiz/useranswer', async (req, res) => {
+// Insert the answers from the user for the question he solved
+app.post('/api/quiz/useranswer', async (req, res) => {
     
 })
 
-app.put('/quiz/:id', async (req, res) => {
+// Change the name of a quiz if you want
+//TODO 
+app.put('/api/quiz/:id', async (req, res) => {
     let result = await knex('quiz').where({
         id: req.params.id
     })
@@ -119,7 +134,9 @@ app.put('/quiz/:id', async (req, res) => {
     }
 })
 
-app.delete('/quiz/:id', async (req, res) => {
+// For deleting quizes
+//TODO Delete this Section of code before releasing 
+app.delete('/api/quiz/:id', async (req, res) => {
     let result = await knex('quiz').where({
         id: req.params.id
     })
