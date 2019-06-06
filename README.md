@@ -1,4 +1,4 @@
-# Why am i here?
+# Don't forget to comment your code
 
 ## run npm install 
 
