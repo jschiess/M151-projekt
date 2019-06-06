@@ -7,50 +7,50 @@ console.log('Willkomen zu unserem Quiz Backend!');
 
 app.use(express.json())
 
-app.get('/quiz', async(req, res) => {
+app.get('/quiz', async (req, res) => {
     result = await knex('quiz')
-                    .select('*')
+        .select('*')
     res.json(result)
     console.log(result)
 })
-app.get('/quiz/:id', async(req, res) => {
+app.get('/quiz/:id', async (req, res) => {
     result = await knex('quiz')
-                    .select('*')
-                    .where('id', req.params.id)
-    if(result.length === 0){
+        .select('*')
+        .where('id', req.params.id)
+    if (result.length === 0) {
         res.status(404)
         res.send('NOT FOUND!\n')
         return
-    }else{
+    } else {
         res.send(result[0])
     }
 })
 
-app.get('/quiz/:id/questions', async(req, res) => {
+app.get('/quiz/:id/questions', async (req, res) => {
     let queryresult = await knex('question')
-                        .leftJoin('answer', 'question.id', 'answer.question_id')
-                        .where('question.quiz_id', req.params.id)
-                        .orderBy('question.order')
- 
+        .leftJoin('answer', 'question.id', 'answer.question_id')
+        .where('question.quiz_id', req.params.id)
+        .orderBy('question.order')
+
     // Pro frage ein Objekt //Liste für anwtworten
 
     let result = []
     let questions = await knex('question').select('question').where('question.quiz_id', req.params.id)
 
-    if(queryresult.length === 0){
+    if (queryresult.length === 0) {
         res.status(404)
         res.send('NOT FOUND!\n')
         return
-    }else{
-        for(question of questions){
+    } else {
+        for (question of questions) {
             let resobj = {
                 question: "",
-                answers:[],
+                answers: [],
             }
             resobj.question = question.question
 
-            for(answer of queryresult){
-                if(answer.question === question.question){
+            for (answer of queryresult) {
+                if (answer.question === question.question) {
                     ansobj = {
                         answer: "",
                         is_correct: true,
@@ -68,47 +68,73 @@ app.get('/quiz/:id/questions', async(req, res) => {
 
 })
 
-app.post('/quiz', async(req, res) => {
+app.post('/quiz', async (req, res) => {
     console.log(req.body.name)
     try {
-      await knex('quiz').insert(req.body)
-      res.send('OK\n')
+        await knex('quiz').insert(req.body)
+        res.send('OK\n')
     } catch (err) {
-      console.log(err)
-      res.status(400)
-      res.send('FAIL\n')
+        console.log(err)
+        res.status(400)
+        res.send('FAIL\n')
     }
 })
 
+app.post('/quiz/user', async (req, res) => {
+    console.log(req.body.name)
+    try {
+        await knex('user').insert(req.body)
+        res.send('OK\n')
+    } catch (err) {
+        console.log(err)
+        res.status(400)
+        res.send('FAIL\n')
+    }
+})
 
+app.put('/quiz/user/isactive')
 
-app.put('/quiz/:id', async(req, res) => {
-    let result = await knex('quiz').where({id: req.params.id})
-    if(result.length === 0) {
+app.post('/quiz/useranswer', async (req, res) => {
+    
+})
+
+app.put('/quiz/:id', async (req, res) => {
+    let result = await knex('quiz').where({
+        id: req.params.id
+    })
+    if (result.length === 0) {
         res.status(404)
         res.send('NOT FOUND\n')
         return
-    }else{
+    } else {
         let result = await knex('quiz')
-                            .where({id: req.params.id})
-                            .update({name: req.body.name})
+            .where({
+                id: req.params.id
+            })
+            .update({
+                name: req.body.name
+            })
         console.log(result)
         res.send('OK\n')
-    }   
+    }
 })
 
 app.delete('/quiz/:id', async (req, res) => {
-        let result = await knex('quiz').where({id: req.params.id})
-        if(result.length === 0) {
-            res.status(404)
-            res.send('NOT FOUND\n')
-            return
-        }
-        result = await knex('quiz')
-                    .where({id: req.params.id})
-                    .del()
-        console.log(result)
-        res.send('OK\n')
+    let result = await knex('quiz').where({
+        id: req.params.id
+    })
+    if (result.length === 0) {
+        res.status(404)
+        res.send('NOT FOUND\n')
+        return
+    }
+    result = await knex('quiz')
+        .where({
+            id: req.params.id
+        })
+        .del()
+    console.log(result)
+    res.send('OK\n')
 })
 
 app.listen(3000, () => console.log("Listening on port 3000"))
