@@ -120,7 +120,7 @@ app.post('/api/quiz', async (req, res) => {
     }
 })
 
-// Intert user to the database
+// Insert user to the database
 /*
 Requierd:
     {
@@ -158,7 +158,8 @@ app.put('/api/quiz/user/change_isactive', async (req, res) => {
 /*
 Requiered:
     {
-        idk: idc, 
+        "user_id": xy,
+        "answer_id": xy, 
     }
 
 */
