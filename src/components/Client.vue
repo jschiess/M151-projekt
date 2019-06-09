@@ -116,7 +116,7 @@ export default {
 
         let result = await axios.post('/api/quiz/user', user )
 
-        this.userID = result
+        this.userID = result.data[0]
         console.log(result)
         this.active = true;
         // goes to the quiz
@@ -125,23 +125,51 @@ export default {
     },
     async POST_answer(el) {
 
-      console.log(el)
+
+      if(this.quiz[this.index]){
+      // console.log(el)
+
+      var answer = this.quiz[this.index].answers[el]
 
       console.log(this.quiz[this.index].answers[el])
 
+      var obj = {
+        "user_id": this.userID,
+        "answer_id": answer.answer_id, 
+    }
+
+      console.log(obj);
+      
+
+      var result = await axios.post('/api/quiz/useranswer', obj)
+      
+      console.log(this.quiz[this.index] != [])
+
+        this.index++
+      } else {
+          alert('ur')
+          this.active = 0
+      }
+
+
+      if(!(this.quiz[this.index])) {
+        this.active = 0
+        alert('quiz is over')
+      }
+
+      console.log(result);
+      
 
 
 
 
-      var answer = {
-        user_id: 1,
-        answer_id: 1
-      };
+      
     },
     async GET_question_answers() {}
   },
   async created() {
     let temp = await axios.get(`/api/quiz/1/questions`);
+    
     this.quiz = temp.data[0]
   }
 };

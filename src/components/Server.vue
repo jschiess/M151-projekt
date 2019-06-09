@@ -71,7 +71,7 @@ import Start from "./Start";
 import Score from "./Score";
 import axios from "axios";
 import Vue from 'vue'
-import { clearInterval } from 'timers';
+
 async function kek() {
   
 
@@ -98,6 +98,9 @@ export default {
   computed: {
     async refresh() {
       let user = await axios.get("/api/quiz/users");
+
+
+      
       this.users = user.data
     }
   },
