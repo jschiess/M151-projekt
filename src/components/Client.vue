@@ -13,7 +13,8 @@
               </v-toolbar>
             </v-flex>
             <v-flex xs6 v-for="(item, n ) in quiz[index].answers" :key="n">
-              <v-card flat v-bind:style="val[n]" id="box" dark @click="index++">
+
+              <v-card flat v-bind:style="val[n]" id="box" dark @click="POST_answer(n)">
                 <v-layout fill-height row wrap>
                   <v-flex xs12 d-flex >
                     <v-spacer></v-spacer>
@@ -29,6 +30,7 @@
                   </v-flex>
                 </v-layout>
               </v-card>
+
             </v-flex>
           </v-layout>
         </v-container>
@@ -65,6 +67,7 @@ export default {
     return {
       active: false,
       user: "testuser",
+      userID: 0,
       frage: "this is question",
       quiz: {},
       index: 0,
@@ -89,24 +92,47 @@ export default {
     // checks if the username is alredy taken
     async check_user() {
       
-      let temp = await axios.get(`/api/quiz/users`);
+      // gets list of all user names
+      let users = await axios.get(`/api/users`);
+        console.log(users.data)
+
       var res = true;
-      temp.data.forEach(el => {
-        console.log(el.nick);
-        console.log(this.user);
+      // for each user 
+      users.data.forEach(el => {
         if (el.nick == this.user) {
+
           alert('Name schon genommen.')
+
           res = false;
         }
       });
 
+      // if the username is not taken
       if (res) {
+
+        var user = {
+          "nick": this.user
+        }
+
+        let result = await axios.post('/api/quiz/user', user )
+
+        this.userID = result
+        console.log(result)
         this.active = true;
         // goes to the quiz
 
       }
     },
-    async POST_answer() {
+    async POST_answer(el) {
+
+      console.log(el)
+
+      console.log(this.quiz[this.index].answers[el])
+
+
+
+
+
       var answer = {
         user_id: 1,
         answer_id: 1
@@ -116,17 +142,10 @@ export default {
   },
   async created() {
     let temp = await axios.get(`/api/quiz/1/questions`);
-    console.log(temp.data[0])
     this.quiz = temp.data[0]
   }
 };
 
-var test = [
-  {
-    nick: "",
-    richtge: 123
-  }
-];
 
 var userID = {};
 </script>
