@@ -129,14 +129,15 @@ Requierd:
 
 */
 app.post('/api/quiz/user', async (req, res) => {
-    console.log(req.body.name)
+    console.log(req.body.nick)
     try {
-        await knex('user').insert({
+        var result = await knex('user').insert({
             "nick": req.body.nick,
             "created_at": Date.now(),
             "is_active": true
         })
-        res.send('OK\n')
+        res.json(result)
+
     } catch (err) {
         console.log(err)
         res.status(400)
@@ -221,4 +222,29 @@ app.delete('/api/quiz/:id', async (req, res) => {
     res.send('OK\n')
 })
 
+
+
+
+// Josiah's trashy code
+
+
+app.get('/api/users', async (req,res) => {
+    var result = await knex('user')
+
+    res.send(result)
+})
+
+
+
+
+
+
+
+
+
 app.listen(3000, () => console.log("Listening on port 3000"))
+
+
+
+
+
