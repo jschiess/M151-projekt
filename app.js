@@ -56,25 +56,29 @@ app.get('/api/quiz/:id', async (req, res) => {
 })
 
 // Gives you all the questions and answers for a quiz
-app.get('/api/quiz/:id/questions', async (req, res) => {
+app.get('/quiz/:id/questions', async (req, res) => {
     let queryresult = await knex('question')
                             .leftJoin('answer', 'question.id', 'answer.question_id')
                             .where('question.quiz_id', req.params.id)
                             .orderBy('question.order')
 
     let result = []
-    let questions = await knex('question').select('question').where('question.quiz_id', req.params.id)
+    let questions = await knex('question').select('question','id').where('question.quiz_id', req.params.id)
 
     if (queryresult.length === 0) {
         res.status(404)
         res.send('NOT FOUND!\n')
         return
     } else {
+
+        console.log(questions);
+        
         for (question of questions) {
 
             // For each question an object with the question and an array with the answers
             let resobj = {
                 question: "",
+                question_id: question.id,
                 answers: [],
             }
             resobj.question = question.question
@@ -85,6 +89,7 @@ app.get('/api/quiz/:id/questions', async (req, res) => {
                     // For each answer an object with the answer and the boolean if its true or false
                     ansobj = {
                         answer: "",
+                        answer_id: answer.id,
                         is_correct: true,
                     }
                     ansobj.answer = answer.answer
