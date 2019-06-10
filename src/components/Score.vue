@@ -1,46 +1,62 @@
-<template>
-	<v-container fill-height app> 
-      <v-layout column>
-        <v-flex xl12 ma-3>
-          <v-card color="primary">
-            
-            
-          </v-card>
-        </v-flex>
-        <v-flex  d-flex>
-          
-          <GChart type="ColumnChart" :data="chartData" :options="chartOptions"/>
-        </v-flex>
-        
-      </v-layout>
+<template >
+  <v-container xs6>
+    <v-layout justify-center align-center wrap row xs7 v-for="(user, n) in users" :key="n">
+      <v-flex xs2>{{ user.nick }}</v-flex>
       
-    </v-container>
+      <v-flex xs10>
+        <v-layout justify-start >
+          <v-flex xs12 >
+            <v-flex v-bind:class="'xs' + lol" style="background-color: red;">s</v-flex>
+            <v-flex v-bind:class="'xs' + users[n].correct" style="background-color: green">a</v-flex>
+          </v-flex>
+        </v-layout>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
-import { GChart } from "vue-google-charts";
+// import { GChart } from "vue-google-charts";
+import axios from 'axios'
+import Vue from 'vue'
 
 export default {
   components: {
-    GChart
+    
   },
   data() {
     return {
+      lol: 1,
+      kek: 10,
       value: true,
+      col: "red",
       d: 56,
-	  chartData: [
-      ["user-1", "kek", "sm"],
-		  ['user-2', Math.random()*10, 5  ],
-		  ['user-3', Math.random()*10, 5 ],
-		  ],
-	  chartOptions: {
-		  title: 'title',
-		  vAxis: {title: ''},
-		  hAxis: {title: ''},
-      series: {1: {type: 'line'}},
-      
-	  }
-    };
+      users: {},
+      total: '',
+      step: this.total/12,
+
+    }
+  },
+  methods: {
+    
+  },
+  async created () { 
+    let result = await axios.get(`/api/quiz/1/questions`);
+    this.total = result.data
+
+
+    this.__interval = setInterval( async() => {
+      let user = await axios.get("/api/quiz/users");
+      Vue.set(this, 'users', user.data)
+
+      if(this.lol < 12) {
+        this.lol+= 1
+
+      } else {
+        this.lol = 0
+      }
+        
+    }, 1000);
   }
 };
 </script>
