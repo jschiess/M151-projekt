@@ -13,7 +13,7 @@ console.log('Willkomen zu unserem Quiz Backend!');
 
 app.use(express.json())
 
-app.get('/api/quiz/users', async (req, res) => {
+app.get('/quiz/users', async (req, res) => {
 
     let list = []
     let user = knex('user').select('*')
@@ -21,8 +21,6 @@ app.get('/api/quiz/users', async (req, res) => {
     let result = await knex('user')
                         .join('user_answer', 'user.id', 'user_answer.user_id')
                         .join('answer', 'user_answer.answer_id', 'answer.id')
-                        //.join('question', 'answer.question_id', 'question.id')
-
                         .select('user.nick')
                         .where('is_correct', 1)
                         .count('answer.is_correct as correct')
@@ -34,7 +32,7 @@ app.get('/api/quiz/users', async (req, res) => {
 })
 
 // Returns all quiz's in the database
-app.get('/api/quiz', async (req, res) => {
+app.get('/quiz', async (req, res) => {
     result = await knex('quiz')
                     .select('*')
     res.json(result)
@@ -42,7 +40,7 @@ app.get('/api/quiz', async (req, res) => {
 })
 
 // Returns a spqcific quiz from the database
-app.get('/api/quiz/:id', async (req, res) => {
+app.get('/quiz/:id', async (req, res) => {
     result = await knex('quiz')
                     .select('*')
                     .where('id', req.params.id)
@@ -56,7 +54,7 @@ app.get('/api/quiz/:id', async (req, res) => {
 })
 
 // Gives you all the questions and answers for a quiz
-app.get('/api/quiz/:id/questions', async (req, res) => {
+app.get('/quiz/:id/questions', async (req, res) => {
     let queryresult = await knex('question')
                             .leftJoin('answer', 'question.id', 'answer.question_id')
                             .where('question.quiz_id', req.params.id)
@@ -108,7 +106,7 @@ Required:
     }
 
 */
-app.post('/api/quiz', async (req, res) => {
+app.post('/quiz', async (req, res) => {
     console.log(req.body.name)
     try {
         await knex('quiz').insert(req.body)
@@ -128,7 +126,7 @@ Requierd:
     }
 
 */
-app.post('/api/quiz/user', async (req, res) => {
+app.post('/quiz/user', async (req, res) => {
     console.log(req.body.name)
     try {
         await knex('user').insert({
@@ -144,8 +142,8 @@ app.post('/api/quiz/user', async (req, res) => {
     }
 })
 
-// Changes the atribute is_active from true to false
-app.put('/api/quiz/user/change_isactive', async (req, res) => {
+// Changes the attribute is_active from true to false
+app.put('/quiz/user/change_isactive', async (req, res) => {
     await knex('user').where({
         is_active: true
     }).update({
@@ -163,7 +161,7 @@ Requiered:
     }
 
 */
-app.post('/api/quiz/useranswer', async (req, res) => {
+app.post('/quiz/useranswer', async (req, res) => {
     try{
         await knex('user_answer').insert({
             "user_id": req.body.user_id,
@@ -180,7 +178,7 @@ app.post('/api/quiz/useranswer', async (req, res) => {
 
 // Change the name of a quiz if you want
 //TODO 
-app.put('/api/quiz/:id', async (req, res) => {
+app.put('/quiz/:id', async (req, res) => {
     let result = await knex('quiz').where({
         id: req.params.id
     })
@@ -203,7 +201,7 @@ app.put('/api/quiz/:id', async (req, res) => {
 
 // For deleting quizes
 //TODO Delete this Section of code before releasing 
-app.delete('/api/quiz/:id', async (req, res) => {
+app.delete('/quiz/:id', async (req, res) => {
     let result = await knex('quiz').where({
         id: req.params.id
     })
