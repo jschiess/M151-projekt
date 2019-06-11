@@ -252,6 +252,7 @@ app.delete('/api/quiz/:id', async (req, res) => {
     res.send('OK\n')
 })
 
+// Get the counter
 app.get('/api/kek',  (req, res) => {
     res.send(kek)
 })
@@ -266,6 +267,8 @@ app.get('/api/users', async (req, res) => {
     res.send(result)
 })
 
+
+// Change the gameState
 app.put('/api/change_gameState', async (req, res) => {
     kek = 0
     gameState = !gameState
@@ -274,11 +277,10 @@ app.put('/api/change_gameState', async (req, res) => {
 })
 
 
-
 app.listen(3000, () => console.log("Listening on port 3000"))
 
 
-
+// Counter
 setInterval(() => {
 
     if(gameState) {
