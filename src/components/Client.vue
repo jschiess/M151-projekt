@@ -1,10 +1,39 @@
 
 <template>
   <v-app>
-    <template>
-      <v-content>
+    <template v-if="loss"> you have lost</template>
+    
+    <template v-else>
+      <v-content grid-list-xs v-if="timeout" >
+        <v-container grid-list-xs fill-height fluid>
+          
+
+        <v-layout row wrap justify-center align-center>
+            <v-flex xs12 d-flex>
+               
+
+            <v-progress-circular large indeterminate></v-progress-circular>
+            
+            </v-flex>
+          </v-layout>
+        
+        </v-container>
+      </v-content>
+
+
+      <v-content v-else>
         <v-container pa-0 fill-height fluid v-if="active">
-          <v-layout row wrap>
+
+          <v-layout row wrap v-if="state != 2" justify-center align-center>
+            <v-flex xs12 d-flex>
+               
+
+            <v-progress-circular large indeterminate></v-progress-circular>
+            
+            </v-flex>
+          </v-layout>
+
+          <v-layout row wrap v-else>
             <v-flex xs12>
               <v-toolbar color="primary" dark hover large>
                 <v-toolbar-title class="test-align-center">
@@ -61,15 +90,19 @@
 
 <script>
 import axios from "axios";
+import Vue from 'vue'
 
 export default {
   data() {
     return {
       active: false,
       user: "testuser",
+      loss: false,
+      timeout: 0,
       userID: 0,
       frage: "this is question",
       quiz: {},
+      state: false,
       index: 0,
       obj: ["share", "pause", "stop", "thumb_up"],
       val: [
@@ -124,6 +157,8 @@ export default {
       }
     },
     async POST_answer(el) {
+      this.timeout = 2 
+
 
 
       if(this.quiz[this.index]){
@@ -169,8 +204,43 @@ export default {
   },
   async created() {
     let temp = await axios.get(`/api/quiz/1/questions`);
+    console.log(temp.data);
     
     this.quiz = temp.data[0]
+
+    
+    this.__interval = setInterval( async() => {
+      let kek = await axios.get('/api/game/get_gameState');
+
+      Vue.set(this, 'state', kek.data[0])
+
+      if(this.timeout > 0) {
+        this.timeout--
+      }
+
+
+      // should check if the user has lost
+/// does not work yet
+
+      var result = await axios.get('/api/quiz/active_users')
+
+      var work = false
+      result.data.forEach(el => {
+        if(el.nick === this.user) {
+          console.log(el);
+          
+          work = true
+        } 
+      });
+
+      if(!work) {
+        this.loss = true
+      }
+
+    }, 1000);
+  },
+  destroyed() {
+    clearInterval(this.__interval)
   }
 };
 

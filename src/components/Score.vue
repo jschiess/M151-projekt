@@ -1,7 +1,7 @@
 <template >
   <v-container xs6>
     <v-flex xs12>
-    <v-btn color="success" @click="start_game()">start</v-btn>
+    <v-btn color="success" @click="start_game()">Pause</v-btn>
     </v-flex>
     <v-layout justify-center align-center wrap row xs7 v-for="(user, n) in users" :key="n">
       <v-flex xs2>{{ user.nick }}</v-flex>
@@ -50,7 +50,7 @@ export default {
   methods: {
     start_game:  async () => {
       
-      var res = await axios.get('/api/game/change_gameState');
+      var res = await axios.get('/api/game/pause_gameState');
 
       console.log(res.data);
     }
@@ -63,8 +63,11 @@ export default {
       let user = await axios.get("/api/quiz/active_users");
       Vue.set(this, "users", user.data);
 
+      let test = await axios.get('/api/game/catchedbyborder')
+      console.log(test)
+
       let res = await axios.get('/api/kek')
-      console.log(res.data);
+      // console.log(res.data);
       Vue.set(this, "border", res.data.kek) 
 
     }, 1000);

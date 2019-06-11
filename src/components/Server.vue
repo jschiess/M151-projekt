@@ -19,6 +19,13 @@
 
       <v-tab-item lazy>
         <Start/>
+        <v-layout row justify-center>
+          
+        <v-flex xs3 d-flex align-content-center>
+          
+        <v-btn @click="startQuiz"  color="success">start quiz</v-btn>
+        </v-flex>
+        </v-layout>
       </v-tab-item>
 
       <v-tab ripple>this is tab</v-tab>
@@ -91,7 +98,7 @@ export default {
   },
   data() {
     return {
-      value: 2,
+      value: 0,
       search: "",
       users: []
     };
@@ -105,10 +112,21 @@ export default {
       this.users = user.data
     }
   },
+  methods: {
+    async startQuiz() {
+      await axios.get('/api/game/start_quiz')
+
+      // changes the tab to the score
+      this.value = 1
+
+    }
+
+  },
   async created() {
     this.__interval = setInterval( async() => {
       let user = await axios.get("/api/quiz/users");
       Vue.set(this, 'users', user.data)
+      
         
     }, 1000);
   },
