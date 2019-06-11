@@ -9,35 +9,64 @@ const knex = require('./knex/knex.js');
 
 const app = express()
 
+var kek = -8
+var gameState = true
+
 console.log('Willkomen zu unserem Quiz Backend!');
 
 app.use(express.json())
 
+
+
 app.get('/api/quiz/users', async (req, res) => {
 
-    let list = []
     let user = knex('user').select('*')
 
     let result = await knex('user')
-                        .join('user_answer', 'user.id', 'user_answer.user_id')
-                        .join('answer', 'user_answer.answer_id', 'answer.id')
-                        //.join('question', 'answer.question_id', 'question.id')
+        .join('user_answer', 'user.id', 'user_answer.user_id')
+        .join('answer', 'user_answer.answer_id', 'answer.id')
+        .select('user.nick')
+        .where('is_correct', 1)
+        .count('answer.is_correct as correct')
+        .groupBy('user.nick')
+        .orderBy('correct', 'desc')
 
-                        .select('user.nick')
-                        .where('is_correct', 1)
-                        .count('answer.is_correct as correct')
-                        .groupBy('user.nick')
-                        .orderBy('correct', 'desc')
-
-    list.push(result)
 
     res.send(result)
 })
 
+// Get all active users
+app.get('/api/quiz/active_users', async (req, res) => {
+
+    let user = knex('user').select('*')
+
+    let result = await knex('user')
+        .join('user_answer', 'user.id', 'user_answer.user_id')
+        .join('answer', 'user_answer.answer_id', 'answer.id')
+        .select('user.nick')
+        .where('is_active', 1)
+        .count('answer.is_correct as correct')
+        .groupBy('user.nick')
+        .orderBy('correct', 'desc')
+
+
+    if (result.length === 0) {
+        res.status(404)
+        res.send('NOT FOUND!\n')
+        return
+    } else {
+        res.send(result)
+    }
+
+})
+
+
+
+
 // Returns all quiz's in the database
 app.get('/api/quiz', async (req, res) => {
     result = await knex('quiz')
-                    .select('*')
+        .select('*')
     res.json(result)
     console.log(result)
 })
@@ -45,8 +74,8 @@ app.get('/api/quiz', async (req, res) => {
 // Returns a spqcific quiz from the database
 app.get('/api/quiz/:id', async (req, res) => {
     result = await knex('quiz')
-                    .select('*')
-                    .where('id', req.params.id)
+        .select('*')
+        .where('id', req.params.id)
     if (result.length === 0) {
         res.status(404)
         res.send('NOT FOUND!\n')
@@ -59,12 +88,12 @@ app.get('/api/quiz/:id', async (req, res) => {
 // Gives you all the questions and answers for a quiz
 app.get('/api/quiz/:id/questions', async (req, res) => {
     let queryresult = await knex('question')
-                            .leftJoin('answer', 'question.id', 'answer.question_id')
-                            .where('question.quiz_id', req.params.id)
-                            .orderBy('question.order')
+        .leftJoin('answer', 'question.id', 'answer.question_id')
+        .where('question.quiz_id', req.params.id)
+        .orderBy('question.order')
 
     let result = []
-    let questions = await knex('question').select('question','id').where('question.quiz_id', req.params.id)
+    let questions = await knex('question').select('question', 'id').where('question.quiz_id', req.params.id)
 
     if (queryresult.length === 0) {
         res.status(404)
@@ -73,7 +102,7 @@ app.get('/api/quiz/:id/questions', async (req, res) => {
     } else {
 
         console.log(questions);
-        
+
         for (question of questions) {
 
             // For each question an object with the question and an array with the answers
@@ -106,6 +135,8 @@ app.get('/api/quiz/:id/questions', async (req, res) => {
 
 })
 
+
+
 // Insert a quiz to the database if the quiz doesen't already exists
 /*
 Required:
@@ -114,6 +145,8 @@ Required:
     }
 
 */
+
+
 app.post('/api/quiz', async (req, res) => {
     console.log(req.body.name)
     try {
@@ -134,6 +167,8 @@ Requierd:
     }
 
 */
+
+
 app.post('/api/quiz/user', async (req, res) => {
     console.log(req.body.nick)
     try {
@@ -158,7 +193,7 @@ app.put('/api/quiz/user/change_isactive', async (req, res) => {
     }).update({
         is_active: false
     })
-    res.send('')
+    res.send('OK\n')
 })
 
 // Insert the answers from the user for the question he solved
@@ -171,14 +206,14 @@ Requiered:
 
 */
 app.post('/api/quiz/useranswer', async (req, res) => {
-    try{
+    try {
         await knex('user_answer').insert({
             "user_id": req.body.user_id,
             "answer_id": req.body.answer_id,
             "created_at": Date.now()
         })
         res.send('OK\n')
-    }catch(err){
+    } catch (err) {
         console.log(err)
         res.status(400)
         res.send('FAIL\n')
@@ -228,29 +263,91 @@ app.delete('/api/quiz/:id', async (req, res) => {
     res.send('OK\n')
 })
 
+app.get('/api/kek', (req, res) => {
+
+    res.send({ kek: kek })
+})
 
 
 
 // Josiah's trashy code
 
 
-app.get('/api/users', async (req,res) => {
-    var result = await knex('user')
+
+
+
+
+// Change the gameState
+
+
+// name is like this becuase if quiz is in the name it does not work
+// dont ask me why it just is like that 
+app.get('/api/game/change_gameState', async (req, res) => {
+    // var result = await knex('user');
+    
+    kek = 
+    gameState = !gameState
+    res.send('ok');
+})
+
+// Cheks if the border has passed the user 
+app.put('/api/game/catchedbyborder', async (req, res) => {
+    let users = await knex('user')
+        .join('user_answer', 'user.id', 'user_answer.user_id')
+        .join('answer', 'user_answer.answer_id', 'answer.id')
+        .select('user.nick')
+        .where('is_active', 1)
+        .count('answer.is_correct as correct')
+        .groupBy('user.nick')
+        .orderBy('correct', 'desc')
+
+
+    if (user.length === 0) {
+        res.status(404)
+        res.send('NOT FOUND\n')
+    } else {
+
+        // hier ist ein problem
+        for (user of users) {
+            // Set the user if passed to inactive
+            if (kek > user.correct) {
+                // kek ist eine zahl von 0 - 100 und correct ist anzahl richtige fragen
+                //  :::TODO:::
+                // user.correct zu einer zahl von 1 - 100 convertieren um dann mit kek zu vergleichen.
+                // kann man mit dne 100/ maximalpunkte * user.correct
+                await knex('user').where({
+                    id: user.id
+                }).update({
+                    is_active: false
+                })
+            }
+        }
+    }
 
     res.send(result)
 })
 
 
 
+// Counter
+var lol = setInterval(() => {
 
+    if(gameState) {
 
+        if (kek >= 100) {
+            gameState = false
+            kek = 100
+        }
+
+        kek += 1
+        console.log(kek)
+    } else {
+
+    }
+
+}, 1000);
 
 
 
 
 app.listen(3000, () => console.log("Listening on port 3000"))
-
-
-
-
-
