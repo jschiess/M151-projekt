@@ -9,7 +9,7 @@ const knex = require('./knex/knex.js');
 
 const app = express()
 
-var kek = 0
+var kek = -8
 var gameState = false
 
 console.log('Willkomen zu unserem Quiz Backend!');
@@ -182,7 +182,7 @@ app.put('/api/quiz/user/change_isactive', async (req, res) => {
     }).update({
         is_active: false
     })
-    res.send('')
+    res.send('OK\n')
 })
 
 // Insert the answers from the user for the question he solved
@@ -253,7 +253,7 @@ app.delete('/api/quiz/:id', async (req, res) => {
 })
 
 // Get the counter
-app.get('/api/kek',  (req, res) => {
+app.get('/api/quiz/kek',  (req, res) => {
     res.send(kek)
 })
 
@@ -261,7 +261,7 @@ app.get('/api/kek',  (req, res) => {
 // Josiah's trashy code
 
 
-app.get('/api/users', async (req, res) => {
+app.get('/api/quiz/users', async (req, res) => {
     var result = await knex('user')
 
     res.send(result)
@@ -269,15 +269,45 @@ app.get('/api/users', async (req, res) => {
 
 
 // Change the gameState
-app.put('/api/change_gameState', async (req, res) => {
-    kek = 0
+app.put('/api/quiz/change_gameState', async (req, res) => {
+    kek = -8
     gameState = !gameState
 
     res.send()
 })
 
+// Cheks if the border has passed the user 
+app.put('/api/quiz/catchedbyborder', async (req, res) => {
+    let users = await knex('user')
+                    .join('user_answer', 'user.id', 'user_answer.user_id')
+                    .join('answer', 'user_answer.answer_id', 'answer.id')
+                    .select('user.nick')
+                    .where('is_active', 1)
+                    .count('answer.is_correct as correct')
+                    .groupBy('user.nick')
+                    .orderBy('correct', 'desc')
+    
+
+    if(user.length === 0){
+        res.status(404)
+        res.send('NOT FOUND\n')
+    }else{
+        for(user of users){
+            // Set the user if passed to inactive
+            if(kek > user.correct){
+                await knex('user').where({
+                    id: user.id
+                }).update({
+                    is_active: false
+                })
+            }
+        }
+    }
+})
+
 
 app.listen(3000, () => console.log("Listening on port 3000"))
+
 
 
 // Counter
