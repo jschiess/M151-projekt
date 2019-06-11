@@ -9,6 +9,9 @@ const knex = require('./knex/knex.js');
 
 const app = express()
 
+var kek = 0
+var gameState = false
+
 console.log('Willkomen zu unserem Quiz Backend!');
 
 app.use(express.json())
@@ -31,7 +34,7 @@ app.get('/api/quiz/users', async (req, res) => {
 })
 
 // Get all active users
-app.get('/quiz/active_users', async (req, res) => { 
+app.get('/api/quiz/active_users', async (req, res) => { 
 
     let user = knex('user').select('*')
 
@@ -249,29 +252,42 @@ app.delete('/api/quiz/:id', async (req, res) => {
     res.send('OK\n')
 })
 
-
+app.get('/api/kek',  (req, res) => {
+    res.send(kek)
+})
 
 
 // Josiah's trashy code
 
 
-app.get('/api/users', async (req,res) => {
+app.get('/api/users', async (req, res) => {
     var result = await knex('user')
 
     res.send(result)
 })
 
+app.put('/api/change_gameState', async (req, res) => {
+    kek = 0
+    gameState = !gameState
 
-
-
-
-
+    res.send()
+})
 
 
 
 app.listen(3000, () => console.log("Listening on port 3000"))
 
 
+
+setInterval(() => {
+
+    if(gameState) {
+        kek += 1
+    } else {
+        
+    }
+    
+}, 1000);
 
 
 
