@@ -29,6 +29,7 @@
 
       <v-tab>Rangliste</v-tab>
       <v-tab-item>
+        
         <v-container fluid justify-center>
           <v-layout justify-center align-center>
             <v-flex xs6>
