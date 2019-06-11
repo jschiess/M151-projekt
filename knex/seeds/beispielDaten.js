@@ -8,7 +8,11 @@ exports.seed = async function(knex) {
   await knex('user').del()
 
   await knex('user').insert([
+<<<<<<< HEAD
     {id: 1, nick: 'julia', created_at: Date.now(), is_active: true },
+=======
+    {id: 1, nick: 'julia', created_at: Date.now(), is_active: true},
+>>>>>>> 1cb90f625628ea3eec30518a6ae5ce11588460c9
     {id: 2, nick: 'mr.mustard', created_at: Date.now(), is_active: false},
   ])
   await knex('quiz').insert([
