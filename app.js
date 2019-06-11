@@ -27,6 +27,7 @@ app.get('/api/quiz/users', async (req, res) => {
                         .where('is_correct', 1)
                         .count('answer.is_correct as correct')
                         .groupBy('user.nick')
+                        .orderBy('correct', 'desc')
 
     list.push(result)
 
