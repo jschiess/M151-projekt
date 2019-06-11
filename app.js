@@ -27,6 +27,7 @@ app.get('/api/quiz/users', async (req, res) => {
                         .where('is_correct', 1)
                         .count('answer.is_correct as correct')
                         .groupBy('user.nick')
+                        .orderBy('correct', 'desc')
 
     list.push(result)
 
@@ -56,7 +57,7 @@ app.get('/api/quiz/:id', async (req, res) => {
 })
 
 // Gives you all the questions and answers for a quiz
-app.get('/quiz/:id/questions', async (req, res) => {
+app.get('/api/quiz/:id/questions', async (req, res) => {
     let queryresult = await knex('question')
                             .leftJoin('answer', 'question.id', 'answer.question_id')
                             .where('question.quiz_id', req.params.id)
