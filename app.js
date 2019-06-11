@@ -15,23 +15,44 @@ app.use(express.json())
 
 app.get('/api/quiz/users', async (req, res) => {
 
-    let list = []
     let user = knex('user').select('*')
 
     let result = await knex('user')
                         .join('user_answer', 'user.id', 'user_answer.user_id')
                         .join('answer', 'user_answer.answer_id', 'answer.id')
-                        //.join('question', 'answer.question_id', 'question.id')
-
                         .select('user.nick')
                         .where('is_correct', 1)
                         .count('answer.is_correct as correct')
                         .groupBy('user.nick')
                         .orderBy('correct', 'desc')
 
-    list.push(result)
 
     res.send(result)
+})
+
+// Get all active users
+app.get('/quiz/active_users', async (req, res) => { 
+
+    let user = knex('user').select('*')
+
+    let result = await knex('user')
+                        .join('user_answer', 'user.id', 'user_answer.user_id')
+                        .join('answer', 'user_answer.answer_id', 'answer.id')
+                        .select('user.nick')
+                        .where('is_active', 1)
+                        .count('answer.is_correct as correct')
+                        .groupBy('user.nick')
+                        .orderBy('correct', 'desc')
+
+
+    if (result.length === 0) {
+        res.status(404)
+        res.send('NOT FOUND!\n')
+        return
+    } else {
+        res.send(result)
+    }
+    
 })
 
 // Returns all quiz's in the database
