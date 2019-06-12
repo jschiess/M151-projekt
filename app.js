@@ -381,6 +381,8 @@ app.get('/api/game/start_quiz', async (req, res) => {
 
 app.get('/api/game/get_gameState', async (req, res) => {
     // var result = await knex('user');
+
+    console.log(gameState);
     
     res.send([gameState]);
 })
@@ -425,7 +427,7 @@ app.get('/api/game/catchedbyborder', async (req, res) => {
         .orderBy('correct', 'desc')
         .select('user.id')
 
-    // console.log(users);
+    console.log("catched by border");
     
         
 
@@ -457,8 +459,8 @@ app.get('/api/game/catchedbyborder', async (req, res) => {
         }
     }
     // yea its kinda pointless but hey not everything is vital
-    var result = await knex('user')
-    res.send(result)
+    // var result = await knex('user')
+    // res.send(200)
 })
 
 
