@@ -103,15 +103,6 @@ export default {
       users: []
     };
   },
-  computed: {
-    async refresh() {
-      let user = await axios.get("/api/quiz/users");
-
-
-      
-      this.users = user.data
-    }
-  },
   methods: {
     async startQuiz() {
       await axios.get('/api/game/start_quiz')
@@ -123,12 +114,12 @@ export default {
 
   },
   async created() {
+
     this.__interval = setInterval( async() => {
       let user = await axios.get("/api/quiz/users");
       Vue.set(this, 'users', user.data)
       
-        
-    }, 1000);
+    }, 5000);
   },
   destroyed() {
     clearInterval(this.__interval)

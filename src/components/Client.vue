@@ -189,6 +189,7 @@ export default {
 
 
       if(!(this.quiz[this.index])) {
+        clearInterval(this.__interval)
         this.active = 0
         alert('quiz is over')
       }

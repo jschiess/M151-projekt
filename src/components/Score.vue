@@ -64,7 +64,7 @@ export default {
     this.step = 100 / result.data[0].length;
 
     this.__interval = setInterval(async () => {
-      
+
       console.log("kys");
     let res = await axios.get("/api/kek");
     console.log(this.border);
@@ -72,8 +72,8 @@ export default {
       let user = await axios.get("/api/quiz/active_users");
       Vue.set(this, "users", user.data);
 
-      let test = await axios.get("/api/game/catchedbyborder");
-      console.log(test);
+      // let test = await axios.get("/api/game/catchedbyborder");
+      // console.log(test);
 
       // console.log('kys');
       // let res = await axios.get('/api/kek')
