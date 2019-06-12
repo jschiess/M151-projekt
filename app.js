@@ -225,17 +225,24 @@ Requiered:
 
 */
 app.post('/api/quiz/useranswer', async (req, res) => {
-    try {
-        await knex('user_answer').insert({
-            "user_id": req.body.user_id,
-            "answer_id": req.body.answer_id,
-            "created_at": Date.now()
-        })
-        res.send('OK\n')
-    } catch (err) {
-        console.log(err)
-        res.status(400)
-        res.send('FAIL\n')
+    
+    let returnFalse = await knex('user').where('user.id', req.body.user_id)
+
+    if(returnFalse[0].is_active === 1){
+        try {
+            await knex('user_answer').insert({
+                "user_id": req.body.user_id,
+                "answer_id": req.body.answer_id,
+                "created_at": Date.now()
+            })
+            res.send('OK\n')
+        } catch (err) {
+            console.log(err)
+            res.status(400)
+            res.send('FAIL\n')
+        }
+    }else{
+        console.log('inactive user_id: ', req.body.user_id)
     }
 })
 
@@ -339,7 +346,7 @@ app.delete('/api/quiz/:id', async (req, res) => {
 
 
 app.get('/api/kek', async (req, res) => {
-    console.log('kek is');
+    console.log('kek is', kek);
     res.send({ kek: kek })
 })
 
@@ -389,14 +396,12 @@ async function fff() {
     let user = knex('user').select('*')
 
     let result = await knex('user')
-                        .join('user_answer', 'user.id', 'user_answer.user_id')
-                        .join('answer', 'user_answer.answer_id', 'answer.id')
-                        .select('user.nick')
-                        .where('is_correct', 1)
-                        .where('user.is_active', 1)
-                        .count('answer.is_correct as correct')
-                        .groupBy('user.nick')
-                        .orderBy('correct', 'desc')
+                    .groupBy('user.nick')
+                    .leftJoin('user_answer', 'user.id', 'user_answer.user_id')
+                    .leftJoin('answer', 'user_answer.answer_id', 'answer.id')
+                    .count('answer.is_correct as correct')
+                    .where('user.is_active', 1)
+                    .select('user.nick', 'user.id')
 
 
         console.log(result);
@@ -412,57 +417,62 @@ async function fff() {
 
 // Checks if the border has passed the user 
 app.get('/api/game/catchedbyborder', async (req, res) => {
-    let users = await knex('user')
-                        .join('user_answer', 'user.id', 'user_answer.user_id')
-                        .join('answer', 'user_answer.answer_id', 'answer.id')
-                        .select('user.nick')
-                        .where('is_correct', 1)
-                        .where('user.is_active', 1)
-                        .count('answer.is_correct as correct')
-                        .groupBy('user.nick')
-                        .orderBy('correct', 'desc')
-                        .select('user.id')
+// let users = await knex('user')
+//                 .groupBy('user.nick')
+//                 .leftJoin('user_answer', 'user.id', 'user_answer.user_id')
+//                 .leftJoin('answer', 'user_answer.answer_id', 'answer.id')
+//                 .count('answer.is_correct as correct')
+//                 .where('user.is_active', 1)
+//                 .select('user.nick', 'user.id')
 
-    // console.log("catched by border");
+// // console.log("catched by border");
+// console.log(users)
+
+
+
+// if (users.length === 0) {
+// res.status(404)
+// res.send('NOT FOUND\n')
+// } else {
+
+// // hier ist ein problem
+// for (user of users) {
     
-        
+//     // Set the user if passed to inactive
 
-    if (users.length === 0) {
-        res.status(404)
-        res.send('NOT FOUND\n')
-    } else {
-
-        // hier ist ein problem
-        for (user of users) {
-            
-            // Set the user if passed to inactive
-
-            var max = await knex('question').where('quiz_id','1')
-            
-            if (kek > user.correct * (100/ max.length)) {
+//     var max = await knex('question').where('quiz_id',1)
+//     /* console.log('max',max); */
+    
+//     if (kek > (user.correct * (100/ max.length))) {
 
 
-                // kek ist eine zahl von 0 - 100 und correct ist anzahl richtige fragen
-                //  :::TODO:::
-                // user.correct zu einer zahl von 1 - 100 convertieren um dann mit kek zu vergleichen.
-                // kann man mit dne 100/ maximalpunkte * user.correct
-                await knex('user').where({
-                    id: user.id
-                }).update({
-                    is_active: false
-                })
-            }
-        }
-    }
-    // yea its kinda pointless but hey not everything is vital
-    // var result = await knex('user')
-    // res.send(200)
+//         // kek ist eine zahl von 0 - 100 und correct ist anzahl richtige fragen
+//         //  :::TODO:::
+//         // user.correct zu einer zahl von 1 - 100 convertieren um dann mit kek zu vergleichen.
+//         // kann man mit dne 100/ maximalpunkte * user.correct
+//         try{
+//             await knex('user').where({
+//                 id: user.id
+//             }).update({
+//                 is_active: false
+//             })
+//         }catch(err){
+//             console.log(err)
+//         }
+//     }
+// }
+// }
+// // yea its kinda pointless but hey not everything is vital
+// // var result = await knex('user')
+// // res.send(200)
+
+
 })
 
 
 
 // Counter
-var lol = setInterval(() => {
+var lol = setInterval(async() => {
 
     if(gameState == 2) {
 
@@ -478,7 +488,32 @@ var lol = setInterval(() => {
 
     }
 
+    let users = await knex('user')
+                        .groupBy('user.nick')
+                        .leftJoin('user_answer', 'user.id', 'user_answer.user_id')
+                        .leftJoin('answer', 'user_answer.answer_id', 'answer.id')
+                        .count('answer.is_correct as correct')
+                        .where('user.is_active', 1)
+                        .select('user.nick', 'user.id')
+
+    var max = await knex('question').where('quiz_id',1)
+
+    for(user of users){
+        if(kek > (user.correct * (100 / max.length))){
+            try{
+                await knex('user').where({
+                    id: user.id
+                }).update({
+                    is_active: false
+                })
+            }catch(err){
+                console.log(err)
+            }
+        }
+    }
+
 }, 1000);
+
 
 
 app.listen(3000, () => console.log("Listening on port 3000"))
