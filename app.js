@@ -473,7 +473,7 @@ var lol = setInterval(() => {
         }
 
         kek += 1
-        console.log('kek is ',kek)
+        // console.log('kek: ',kek)
     } else {
 
     }
