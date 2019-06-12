@@ -28,13 +28,13 @@ app.get('/api/quiz/users', async (req, res) => {
     let user = knex('user').select('*')
 
     let result = await knex('user')
-        .join('user_answer', 'user.id', 'user_answer.user_id')
-        .join('answer', 'user_answer.answer_id', 'answer.id')
-        .select('user.nick')
-        .where('is_correct', 1)
-        .count('answer.is_correct as correct')
-        .groupBy('user.nick')
-        .orderBy('correct', 'desc')
+                        .join('user_answer', 'user.id', 'user_answer.user_id')
+                        .join('answer', 'user_answer.answer_id', 'answer.id')
+                        .select('user.nick')
+                        .where('is_correct', 1)
+                        .count('answer.is_correct as correct')
+                        .groupBy('user.nick')
+                        .orderBy('correct', 'desc')
 
 
     res.send(result)
@@ -79,7 +79,7 @@ let result =  await knex('user')
 // Returns all quiz's in the database
 app.get('/api/quiz', async (req, res) => {
     result = await knex('quiz')
-        .select('*')
+                    .select('*')
     res.json(result)
     console.log(result)
 })
@@ -87,8 +87,8 @@ app.get('/api/quiz', async (req, res) => {
 // Returns a spqcific quiz from the database
 app.get('/quiz/:id', async (req, res) => {
     result = await knex('quiz')
-        .select('*')
-        .where('id', req.params.id)
+                    .select('*')
+                    .where('id', req.params.id)
     if (result.length === 0) {
         res.status(404)
         res.send('NOT FOUND!\n')
@@ -101,9 +101,9 @@ app.get('/quiz/:id', async (req, res) => {
 // Gives you all the questions and answers for a quiz
 app.get('/api/quiz/:id/questions', async (req, res) => {
     let queryresult = await knex('question')
-        .leftJoin('answer', 'question.id', 'answer.question_id')
-        .where('question.quiz_id', req.params.id)
-        .orderBy('question.order')
+                            .leftJoin('answer', 'question.id', 'answer.question_id')
+                            .where('question.quiz_id', req.params.id)
+                            .orderBy('question.order')
 
     let result = []
     let questions = await knex('question').select('question', 'id').where('question.quiz_id', req.params.id)
@@ -389,14 +389,14 @@ async function fff() {
     let user = knex('user').select('*')
 
     let result = await knex('user')
-        .join('user_answer', 'user.id', 'user_answer.user_id')
-        .join('answer', 'user_answer.answer_id', 'answer.id')
-        .select('user.nick')
-        .where('is_correct', 1)
-        .where('user.is_active', 1)
-        .count('answer.is_correct as correct')
-        .groupBy('user.nick')
-        .orderBy('correct', 'desc')
+                        .join('user_answer', 'user.id', 'user_answer.user_id')
+                        .join('answer', 'user_answer.answer_id', 'answer.id')
+                        .select('user.nick')
+                        .where('is_correct', 1)
+                        .where('user.is_active', 1)
+                        .count('answer.is_correct as correct')
+                        .groupBy('user.nick')
+                        .orderBy('correct', 'desc')
 
 
         console.log(result);
@@ -410,18 +410,18 @@ async function fff() {
 
 
 
-// Cheks if the border has passed the user 
+// Checks if the border has passed the user 
 app.get('/api/game/catchedbyborder', async (req, res) => {
     let users = await knex('user')
-        .join('user_answer', 'user.id', 'user_answer.user_id')
-        .join('answer', 'user_answer.answer_id', 'answer.id')
-        .select('user.nick')
-        .where('is_correct', 1)
-        .where('user.is_active', 1)
-        .count('answer.is_correct as correct')
-        .groupBy('user.nick')
-        .orderBy('correct', 'desc')
-        .select('user.id')
+                        .join('user_answer', 'user.id', 'user_answer.user_id')
+                        .join('answer', 'user_answer.answer_id', 'answer.id')
+                        .select('user.nick')
+                        .where('is_correct', 1)
+                        .where('user.is_active', 1)
+                        .count('answer.is_correct as correct')
+                        .groupBy('user.nick')
+                        .orderBy('correct', 'desc')
+                        .select('user.id')
 
     // console.log("catched by border");
     
@@ -479,8 +479,6 @@ var lol = setInterval(() => {
     }
 
 }, 1000);
-
-
 
 
 app.listen(3000, () => console.log("Listening on port 3000"))
