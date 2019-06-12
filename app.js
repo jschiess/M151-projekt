@@ -339,7 +339,7 @@ app.delete('/api/quiz/:id', async (req, res) => {
 
 
 app.get('/api/kek', async (req, res) => {
-
+    console.log('kek is');
     res.send({ kek: kek })
 })
 
@@ -378,7 +378,7 @@ app.get('/api/game/start_quiz', async (req, res) => {
 app.get('/api/game/get_gameState', async (req, res) => {
     // var result = await knex('user');
 
-    console.log(gameState);
+    console.log('gameState', gameState);
     
     res.send([gameState]);
 })
@@ -423,7 +423,7 @@ app.get('/api/game/catchedbyborder', async (req, res) => {
         .orderBy('correct', 'desc')
         .select('user.id')
 
-    console.log("catched by border");
+    // console.log("catched by border");
     
         
 
@@ -473,7 +473,7 @@ var lol = setInterval(() => {
         }
 
         kek += 1
-        console.log(kek)
+        console.log('kek is ',kek)
     } else {
 
     }
