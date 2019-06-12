@@ -50,7 +50,7 @@ export default {
   methods: {
     start_game:  async () => {
       
-      var res = await axios.get('/api/game/pause_gameState');
+      var res = await axios.get('/api/game/change_isactive');
 
       console.log(res.data);
     }
@@ -66,8 +66,9 @@ export default {
       let test = await axios.get('/api/game/catchedbyborder')
       console.log(test)
 
+
+      console.log('kys');
       let res = await axios.get('/api/kek')
-      // console.log(res.data);
       Vue.set(this, "border", res.data.kek) 
 
     }, 1000);

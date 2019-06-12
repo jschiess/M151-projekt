@@ -5,6 +5,7 @@
     
     <template v-else>
       <v-content grid-list-xs v-if="timeout" >
+        {{ timeout }}
         <v-container grid-list-xs fill-height fluid>
           
 
@@ -157,7 +158,7 @@ export default {
       }
     },
     async POST_answer(el) {
-      this.timeout = 2 
+      // this.timeout = 2 
 
 
 
@@ -211,31 +212,32 @@ export default {
     
     this.__interval = setInterval( async() => {
       let kek = await axios.get('/api/game/get_gameState');
+      console.log(kek);
 
       Vue.set(this, 'state', kek.data[0])
 
       if(this.timeout > 0) {
-        this.timeout--
+        this.timeout-= 1
       }
 
 
       // should check if the user has lost
 /// does not work yet
 
-      var result = await axios.get('/api/quiz/active_users')
+      // var result = await axios.get('/api/quiz/active_users')
 
-      var work = false
-      result.data.forEach(el => {
-        if(el.nick === this.user) {
-          console.log(el);
+      // var work = false
+      // result.data.forEach(el => {
+      //   if(el.nick === this.user) {
+      //     console.log(el);
           
-          work = true
-        } 
-      });
+      //     work = true
+      //   } 
+      // });
 
-      if(!work) {
-        this.loss = true
-      }
+      // if(!work) {
+      //   // this.loss = true
+      // }
 
     }, 1000);
   },
