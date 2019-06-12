@@ -61,18 +61,22 @@ app.get('/quiz/:id/questions', async (req, res) => {
                             .orderBy('question.order')
 
     let result = []
-    let questions = await knex('question').select('question').where('question.quiz_id', req.params.id)
+    let questions = await knex('question').select('question','id').where('question.quiz_id', req.params.id)
 
     if (queryresult.length === 0) {
         res.status(404)
         res.send('NOT FOUND!\n')
         return
     } else {
+
+        console.log(questions);
+        
         for (question of questions) {
 
             // For each question an object with the question and an array with the answers
             let resobj = {
                 question: "",
+                question_id: question.id,
                 answers: [],
             }
             resobj.question = question.question
@@ -83,6 +87,7 @@ app.get('/quiz/:id/questions', async (req, res) => {
                     // For each answer an object with the answer and the boolean if its true or false
                     ansobj = {
                         answer: "",
+                        answer_id: answer.id,
                         is_correct: true,
                     }
                     ansobj.answer = answer.answer
@@ -126,15 +131,16 @@ Requierd:
     }
 
 */
-app.post('/quiz/user', async (req, res) => {
-    console.log(req.body.name)
+app.post('/api/quiz/user', async (req, res) => {
+    console.log(req.body.nick)
     try {
-        await knex('user').insert({
+        var result = await knex('user').insert({
             "nick": req.body.nick,
             "created_at": Date.now(),
             "is_active": true
         })
-        res.send('OK\n')
+        res.json(result)
+
     } catch (err) {
         console.log(err)
         res.status(400)
@@ -219,4 +225,29 @@ app.delete('/quiz/:id', async (req, res) => {
     res.send('OK\n')
 })
 
+
+
+
+// Josiah's trashy code
+
+
+app.get('/api/users', async (req,res) => {
+    var result = await knex('user')
+
+    res.send(result)
+})
+
+
+
+
+
+
+
+
+
 app.listen(3000, () => console.log("Listening on port 3000"))
+
+
+
+
+
