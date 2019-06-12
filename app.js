@@ -51,6 +51,9 @@ app.get('/api/quiz/users', async (req, res) => {
 // 👏#👏#👏#👏#👏#👏#👏#👏#👏#👏#👏#👏#👏#👏
 
 // Get all active users
+/*
+
+*/
 app.get('/api/quiz/active_users', async (req, res) => {
 
     let user = knex('user').select('*')
@@ -58,12 +61,9 @@ app.get('/api/quiz/active_users', async (req, res) => {
     let result = await knex('user')
         .join('user_answer', 'user.id', 'user_answer.user_id')
         .join('answer', 'user_answer.answer_id', 'answer.id')
-        .select('user.nick')
         .where('is_active', 1)
-        .where('is_correct', 1)
         .count('answer.is_correct as correct')
         .groupBy('user.nick')
-        .select('user.id')
         // .orderBy('correct', 'desc')
 
         res.send(result)
