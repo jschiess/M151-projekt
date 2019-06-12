@@ -51,30 +51,26 @@ app.get('/api/quiz/users', async (req, res) => {
 // 👏#👏#👏#👏#👏#👏#👏#👏#👏#👏#👏#👏#👏#👏
 
 // Get all active users
+/*
+
+*/
 app.get('/api/quiz/active_users', async (req, res) => {
 
-    let user = knex('user').select('*')
 
-    let result = await knex('user')
-        .join('user_answer', 'user.id', 'user_answer.user_id')
-        .join('answer', 'user_answer.answer_id', 'answer.id')
-        .select('user.nick')
-        .where('is_active', 1)
-        .where('is_correct', 1)
-        .count('answer.is_correct as correct')
-        .groupBy('user.nick')
-        .select('user.id')
-        // .orderBy('correct', 'desc')
+let result =  await knex('user')
+                    .groupBy('user.nick')
+                    .leftJoin('user_answer', 'user.id', 'user_answer.user_id')
+                    .leftJoin('answer', 'user_answer.answer_id', 'answer.id')
+                    .count('answer.is_correct as correct')
+                    .where('user.is_active', 1)
+                    .select('user.nick', 'user.id')
 
+    if (result.length === 0) {
+        res.status(404)
+        res.send('NOT FOUND!\n')
+    } else {
         res.send(result)
-
-    // if (result.length === 0) {
-    //     res.status(404)
-    //     res.send('NOT FOUND!\n')
-    // } else {
-    //     res.send(result)
-    // }
-
+    }
 })
 
 
@@ -89,7 +85,7 @@ app.get('/api/quiz', async (req, res) => {
 })
 
 // Returns a spqcific quiz from the database
-app.get('/api/quiz/:id', async (req, res) => {
+app.get('/quiz/:id', async (req, res) => {
     result = await knex('quiz')
         .select('*')
         .where('id', req.params.id)
