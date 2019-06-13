@@ -10,7 +10,6 @@
           v-bind:style="{'width': border + '%'}"
         >s</v-flex>
       </v-flex>
-      {{ border}}
     </v-layout>
     <v-layout justify-center align-center wrap row xs7 v-for="(user, n) in users" :key="n">
       <v-flex xs2>{{ user.nick }}</v-flex>

@@ -4,14 +4,13 @@
     <template v-if="loss">
       <v-layout row wrap justify-center align-center>
         <v-flex xs12 d-flex>
-          <h2 >YOU HAVE LOST</h2>
+          <h2>YOU HAVE LOST</h2>
         </v-flex>
       </v-layout>
     </template>
 
     <template v-else>
       <v-content grid-list-xs v-if="timeout">
-        {{ timeout }}
         <v-container grid-list-xs fill-height fluid>
           <v-layout row wrap justify-center align-center>
             <v-flex xs12 d-flex>
@@ -88,11 +87,11 @@ import Vue from "vue";
 export default {
   data() {
     return {
-      active: false, 
+      active: false,
       user: "testuser",
       loss: false, // toggle loss screen
-      timeout: 0, 
-      userID: 0, 
+      timeout: 0,
+      userID: 0,
       quiz: {}, // quiz object
       state: false, // the state of the game 2 = running 1 = waiting 3 = paused
       index: 0,
@@ -155,7 +154,6 @@ export default {
 
         await axios.post("/api/quiz/useranswer", obj);
 
-
         this.index++;
       } else {
         alert("quiz is over");
@@ -188,24 +186,29 @@ export default {
       // should check if the user has lost
       /// does not work yet
 
-      if (this.state === 2) {
-      var result = await axios.get("/api/quiz/active_users");
-        
-      var work = false;
-      result.data.forEach(el => {
-        // console.log(el.nick, this.user);
-        // console.log(this.status);
-        // console.log(el.nick === this.user && this.state === 2);
-        if (el.nick === this.user && this.state === 2) {
-          // console.log(el);
+      if (this.state === 2 && this.active && this.index>0) {
+        var result = await axios.get("/api/quiz/active_users");
+        console.log(result.data);
+        if (result.data.length === 0) {
+          // console.log('lost');
+          this.loss = true
+        } else {
+          var work = false;
+          result.data.forEach(el => {
+            // console.log(el.nick, this.user);
+            // console.log(this.status);
+            // console.log(el.nick === this.user && this.state === 2);
+            if (el.nick === this.user && this.state === 2) {
+              // console.log(el);
 
-          work = true;
+              work = true;
+            }
+          });
+
+          if (!work) {
+            this.loss = true;
+          }
         }
-      });
-
-      if (!work) {
-        this.loss = true;
-      }
       }
     }, 1000);
   },
@@ -213,12 +216,11 @@ export default {
     clearInterval(this.__interval);
   }
 };
-
 </script>
 
 
 <style>
 h2 {
-  text-align: center
+  text-align: center;
 }
 </style>
