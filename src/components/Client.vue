@@ -223,4 +223,7 @@ export default {
 h2 {
   text-align: center;
 }
+#box{
+  height: 40vh
+}
 </style>

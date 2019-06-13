@@ -4,9 +4,8 @@ import Vue from 'vue'
 import App from '../App'
 import Server from '../components/Server'
 import Client from '../components/Client'
-var test = {
-	template: '<h1> kek </h1>'
-}
+import test from '../components/test'
+
 
 Vue.use(VueRouter)
 
@@ -26,6 +25,7 @@ export default new VueRouter({
 			path: '/client',
 			name: 'client',
 			component: Client
-		}
+		},
+
 	]
 })
