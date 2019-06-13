@@ -1,10 +1,6 @@
 <template >
   <v-container xs6>
-    <v-flex xs12>
-      <!-- <v-btn color="success" @click="start_game()">Pause</v-btn>
-      -->
-      <!-- <v-btn color="success" @click="why">text</v-btn> -->
-    </v-flex>
+    <v-flex xs12></v-flex>
     <v-layout row wrap justify-center align-center>
       <v-flex xs2>users</v-flex>
       <v-flex xs10>
@@ -16,15 +12,12 @@
       </v-flex>
       {{ border}}
     </v-layout>
-    <!-- <v-flex v-else style="background-color: red; color:red" v-bind:style="{'width': border + '%'}">s</v-flex> -->
     <v-layout justify-center align-center wrap row xs7 v-for="(user, n) in users" :key="n">
       <v-flex xs2>{{ user.nick }}</v-flex>
 
       <v-flex xs10>
         <v-layout justify-start>
           <v-flex xs12>
-            <!-- <v-flex style="background-color: red;color: red " v-bind:style="{'width': border + '%'}">s</v-flex> -->
-
             <v-flex
               absolute
               v-bind:style="{'width': user.correct * step + '%'}"
@@ -46,33 +39,19 @@ export default {
   components: {},
   data() {
     return {
-      btn: {
-        col: "",
-        val: "",
-        meth: ""
-      },
-
-      border: 20,
-      kek: 10,
-      value: true,
-      col: "red",
-      d: 56,
-      users: {},
+      border: 0,
+      users: {}, // all active users
       step: 0
     };
   },
   methods: {
     start_game: async () => {
       var res = await axios.get("/api/game/change_isactive");
-
-      console.log(res.data);
-    },
-    async why() {}
+    }
   },
   async created() {
     let result = await axios.get(`/api/quiz/1/questions`);
     this.step = 100 / result.data[0].length;
-
 
     this.__interval = setInterval(async () => {
       // console.log("kys");
@@ -82,14 +61,6 @@ export default {
       let user = await axios.get("/api/quiz/active_users");
       console.log(user);
       Vue.set(this, "users", user.data);
-
-      // let test = await axios.get("/api/game/catchedbyborder");
-      // console.log(test);
-
-      // console.log('kys');
-      // let res = await axios.get('/api/kek')
-      // console.log(this.border);
-      // Vue.set(this, "border", res.data.kek)
     }, 1000);
   },
   destroyed() {
