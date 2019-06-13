@@ -58,7 +58,7 @@ app.get('/api/quiz/users', async (req, res) => {
 /*
 
 */
-app.get('/api/quiz/active_users', async (req, res) => {
+app.get('/quiz/active_users', async (req, res) => {
 
 
     let result = await knex('user')
