@@ -410,7 +410,7 @@ async function fff() {
         .groupBy('user.nick')
         .leftJoin('user_answer', 'user.id', 'user_answer.user_id')
         .leftJoin('answer', 'user_answer.answer_id', 'answer.id')
-        .count('answer.is_correct as correct')
+        .sum('answer.is_correct as correct')
         .where('user.is_active', 1)
         .select('user.nick', 'user.id')
 
@@ -500,12 +500,12 @@ var lol = setInterval(async () => {
     }
 
     let users = await knex('user')
-        .groupBy('user.nick')
-        .leftJoin('user_answer', 'user.id', 'user_answer.user_id')
-        .leftJoin('answer', 'user_answer.answer_id', 'answer.id')
-        .count('answer.is_correct as correct')
-        .where('user.is_active', 1)
-        .select('user.nick', 'user.id')
+                        .groupBy('user.nick')
+                        .leftJoin('user_answer', 'user.id', 'user_answer.user_id')
+                        .leftJoin('answer', 'user_answer.answer_id', 'answer.id')
+                        .sum('answer.is_correct as correct')
+                        .where('user.is_active', 1)
+                        .select('user.nick', 'user.id')
 
     var max = await knex('question').where('quiz_id', 1)
 
