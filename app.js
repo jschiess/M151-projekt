@@ -41,6 +41,10 @@ app.get('/api/quiz/users', async (req, res) => {
 })
 
 
+
+
+
+
 // 👏#👏#👏#👏#👏#👏#👏#👏#👏#👏#👏#👏#👏#👏
 // 👏#👏#👏#👏#👏#👏#👏#👏#👏#👏#👏#👏#👏#👏
 // 👏#👏#👏#👏#👏#👏#👏#👏#👏#👏#👏#👏#👏#👏
@@ -61,6 +65,7 @@ let result =  await knex('user')
                     .groupBy('user.nick')
                     .leftJoin('user_answer', 'user.id', 'user_answer.user_id')
                     .leftJoin('answer', 'user_answer.answer_id', 'answer.id')
+                    .where('answer.is_correct', 1)
                     .count('answer.is_correct as correct')
                     .where('user.is_active', 1)
                     .select('user.nick', 'user.id')
