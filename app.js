@@ -33,6 +33,7 @@ app.get('/api/quiz/users', async (req, res) => {
                         .select('user.nick')
                         .sum('answer.is_correct as correct')
                         .groupBy('user.nick')
+                        .orderBy('correct', 'desc')
 
 
 
