@@ -70,8 +70,8 @@ app.get('/api/quiz/active_users', async (req, res) => {
                         .select('user.nick', 'user.id')
 
     if (result.length === 0) {
-        res.status(404)
-        res.send('NOT FOUND!\n')
+        // res.status(404)
+        res.send([])
     } else {
         res.send(result)
     }
