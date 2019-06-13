@@ -3,20 +3,32 @@
     <v-flex xs12>
       <!-- <v-btn color="success" @click="start_game()">Pause</v-btn>
       -->
-      <v-btn color="success" @click="why">text</v-btn>
+      <!-- <v-btn color="success" @click="why">text</v-btn> -->
     </v-flex>
+    <v-layout row wrap justify-center align-center>
+      <v-flex xs2>users</v-flex>
+      <v-flex xs10>
+        <v-flex
+          v-if="border>0"
+          style="background-color: red; color:red"
+          v-bind:style="{'width': border + '%'}"
+        >s</v-flex>
+      </v-flex>
+      {{ border}}
+    </v-layout>
+    <!-- <v-flex v-else style="background-color: red; color:red" v-bind:style="{'width': border + '%'}">s</v-flex> -->
     <v-layout justify-center align-center wrap row xs7 v-for="(user, n) in users" :key="n">
       <v-flex xs2>{{ user.nick }}</v-flex>
 
       <v-flex xs10>
         <v-layout justify-start>
           <v-flex xs12>
-            <v-flex style="background-color: red; " v-bind:style="{'width': border + '%'}">s</v-flex>
+            <!-- <v-flex style="background-color: red;color: red " v-bind:style="{'width': border + '%'}">s</v-flex> -->
 
             <v-flex
               absolute
-              v-bind:style="{'width': users[n].correct * step + '%'}"
-              style="background-color: green; "
+              v-bind:style="{'width': user.correct * step + '%'}"
+              style="background-color: green; color: green "
             >a</v-flex>
           </v-flex>
         </v-layout>
@@ -58,18 +70,17 @@ export default {
     async why() {}
   },
   async created() {
-    
-
     let result = await axios.get(`/api/quiz/1/questions`);
     this.step = 100 / result.data[0].length;
 
-    this.__interval = setInterval(async () => {
 
-      console.log("kys");
-    let res = await axios.get("/api/kek");
-    console.log(this.border);
-    Vue.set(this, "border", res.data.kek);
+    this.__interval = setInterval(async () => {
+      // console.log("kys");
+      let res = await axios.get("/api/kek");
+      console.log(this.border);
+      Vue.set(this, "border", res.data.kek);
       let user = await axios.get("/api/quiz/active_users");
+      console.log(user);
       Vue.set(this, "users", user.data);
 
       // let test = await axios.get("/api/game/catchedbyborder");
