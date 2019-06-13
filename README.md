@@ -1,43 +1,30 @@
-# Don't forget to comment your code
+#How to Start the Quiz
 
-## run npm install 
-
-## run npm build
+##Frontend
+Command Nr.1:
 ```
-in the dist folder there will be 
-
+npm install
+```
+Command Nr.2:
+```
+npm run serve
 ```
 
+##Backend
 
-
-# unterichts stuff
-```js {cmd=node} 
-
-function Point(x, y) {
-	let p = {
-		x: x, 
-		y: y,
-		distanceFrom: function (obj)  {
-			let x1 = this.x
-			let x2 = obj.x
-			
-			let y1 = this.y
-			let y2 = obj.y
-			return Math.sqrt((x1-x2)**2 + (y1-y2)**2 )
-
-		},
-	}
-
-	return p
-}
-
-
-var einseins = Point(1, 1)
-var zwei = Point(2, 2)
-
-var a = einseins.distanceFrom(zwei)
-
-
-
-console.log(a)
+Command Nr.1:
+```
+npm install
+```
+Commant Nr.2:
+```
+knex migrate:latest
+```
+Command Nr.3:
+```
+knex seed:run
+```
+Command Nr.4:
+```
+nodemon ./app.js
 ```
