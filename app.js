@@ -495,7 +495,7 @@ var lol = setInterval(async () => {
         }
 
         kek += 1
-        // console.log('kek: ',kek)
+        
     } else {
 
     }
