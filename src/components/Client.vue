@@ -26,31 +26,22 @@
             <v-flex xs12 d-flex>
               <v-progress-circular large indeterminate></v-progress-circular>
             </v-flex>
+            <v-flex xs12></v-flex>
           </v-layout>
 
           <v-layout row wrap v-else>
-            <v-flex xs12>
-              <v-toolbar color="primary" dark hover large>
-                <v-toolbar-title class="test-align-center">
-                  <h1>{{ quiz[index].question }}</h1>
-                </v-toolbar-title>
-              </v-toolbar>
-            </v-flex>
+            <v-toolbar color="white" fixed hover fluid style="z-index: 999">
+              <v-spacer></v-spacer>
+              <h1>{{ quiz[index].question }}</h1>
+              <v-spacer></v-spacer>
+            </v-toolbar>
             <v-flex xs6 v-for="(item, n ) in quiz[index].answers" :key="n">
-              <v-card flat v-bind:style="val[n]" id="box" dark @click="POST_answer(n)">
-                <v-layout fill-height row wrap>
-                  <v-flex xs12 d-flex>
-                    <v-spacer></v-spacer>
-
-                    <!-- <v-icon large dark>{{ obj[n] }}</v-icon> -->
-                    <span d-flex></span>
-                    <v-flex xs12>
-                      <h1>{{ item.answer}}</h1>
-                    </v-flex>
-
-                    <v-spacer></v-spacer>
+              <v-card flat v-bind:style="val[n]" id="box" dark @click="POST_answer(n)" hover>
+                <v-container fill-height fluid>
+                  <v-flex align-content-center>
+                    <h2>{{ item.answer }}</h2>
                   </v-flex>
-                </v-layout>
+                </v-container>
               </v-card>
             </v-flex>
           </v-layout>
@@ -88,26 +79,26 @@ export default {
   data() {
     return {
       active: false,
-      user: "testuser",
+      user: "",
       loss: false, // toggle loss screen
       timeout: 0,
       userID: 0,
       quiz: {}, // quiz object
-      state: false, // the state of the game 2 = running 1 = waiting 3 = paused
+      state: 0, // the state of the game 2 = running 1 = waiting 3 = paused
       index: 0,
       obj: ["share", "pause", "stop", "thumb_up"],
       val: [
         {
-          backgroundColor: "darkblue"
+          backgroundColor: "#0767E8"
         },
         {
-          backgroundColor: "green"
+          backgroundColor: "#E515FF"
         },
         {
-          backgroundColor: "orange"
+          backgroundColor: "#E85707"
         },
         {
-          backgroundColor: "yellow"
+          backgroundColor: "#FFC70D"
         }
       ]
     };
@@ -158,11 +149,16 @@ export default {
       } else {
         alert("quiz is over");
         this.active = 0;
+        this.timeout = 0;
+        this.gamestate = 0;
+        clearInterval(this.__interval);
       }
 
       if (!this.quiz[this.index]) {
         clearInterval(this.__interval);
         this.active = 0;
+        this.timeout = 0;
+        this.gamestate = 0;
         alert("quiz is over");
       }
     },
@@ -170,11 +166,55 @@ export default {
   },
   async created() {
     let temp = await axios.get(`/api/quiz/1/questions`);
-
+    // this.quiz = [
+    //   {
+    //     question: "is u dump?",
+    //     question_id: 1,
+    //     answers: [
+    //       {
+    //         answer: "yes",
+    //         is_correct: true,
+    //         answer_id: 1
+    //       },
+    //       {
+    //         answer: "no",
+    //         is_correct: false,
+    //         answer_id: 2
+    //       },
+    //       {
+    //         answer: "maybe",
+    //         is_correct: false,
+    //         answer_id: 2
+    //       },
+    //       {
+    //         answer: "kek",
+    //         is_correct: false,
+    //         answer_id: 2
+    //       },
+    //     ]
+    //   },
+    //   {
+    //     question: "what u looking at son",
+    //     question_id: 1,
+    //     answers: [
+    //       {
+    //         answer: "yes",
+    //         is_correct: true,
+    //         answer_id: 1
+    //       },
+    //       {
+    //         answer: "no",
+    //         is_correct: false,
+    //         answer_id: 2
+    //       }
+    //     ]
+    //   }
+    // ];
     this.quiz = temp.data[0];
 
     this.__interval = setInterval(async () => {
       let kek = await axios.get("/api/game/get_gameState");
+
       // console.log(kek);
 
       Vue.set(this, "state", kek.data[0]);
@@ -186,12 +226,12 @@ export default {
       // should check if the user has lost
       /// does not work yet
 
-      if (this.state === 2 && this.active && this.index>0) {
+      if (this.state === 2 && this.active && this.index > 0) {
         var result = await axios.get("/api/quiz/active_users");
-        console.log(result.data);
+        // var result = { data: ["true"] };
+        // console.log(result.data);
         if (result.data.length === 0) {
-          // console.log('lost');
-          this.loss = true
+          this.loss = true;
         } else {
           var work = false;
           result.data.forEach(el => {
@@ -223,7 +263,10 @@ export default {
 h2 {
   text-align: center;
 }
-#box{
-  height: 40vh
+h1 {
+  font-size: auto;
+}
+#box {
+  min-height: 100%;
 }
 </style>

@@ -1,36 +1,45 @@
 <template >
   <v-container xs6>
-    <v-flex xs12></v-flex>
-    <v-layout row wrap justify-center align-center>
-      <v-flex xs2>users</v-flex>
-      <v-flex xs10>
-        <v-flex
-          v-if="border>0"
-          style="background-color: red; color:red"
-          v-bind:style="{'width': border + '%'}"
-        >s</v-flex>
-      </v-flex>
-    </v-layout>
-    <v-layout justify-center align-center wrap row xs7 v-for="(user, n) in users" :key="n">
-      <v-flex xs2>{{ user.nick }}</v-flex>
+    <v-card>
+      <v-container grid-list-xs>
 
-      <v-flex xs10>
-        <v-layout justify-start>
-          <v-flex xs12>
+        <v-layout row wrap justify-center align-center>
+          <v-flex xs2>
+            <h2>Users</h2>
+          </v-flex>
+          <v-flex xs10>
+            <h2>Progress</h2>
+            
             <v-flex
-              absolute
-              v-bind:style="{'width': user.correct * step + '%'}"
-              style="background-color: green; color: green "
-            >a</v-flex>
+              v-if="border > 0"
+              style="background-color: red; color:red"
+              v-bind:style="{'width': border + '%'}"
+            >_</v-flex>
+          </v-flex>
+        </v-layout >
+        <v-divider ></v-divider>
+        <v-layout justify-center align-center wrap row xs7 v-for="(user, n) in users" :key="n">
+          <v-flex xs2><h3>{{ user.nick }}</h3> </v-flex>
+          
+
+          <v-flex xs10>
+            <v-layout justify-start>
+              <v-flex xs12>
+                <v-flex
+                  absolute
+                  v-bind:style="{'width': user.correct * step + '%'}"
+                  style="background-color: green; color: green "
+                >a</v-flex>
+              </v-flex>
+            </v-layout>
           </v-flex>
         </v-layout>
-      </v-flex>
-    </v-layout>
+      </v-container>
+    </v-card>
   </v-container>
 </template>
 
 <script>
-// import { GChart } from "vue-google-charts";
 import axios from "axios";
 import Vue from "vue";
 

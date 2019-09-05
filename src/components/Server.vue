@@ -28,7 +28,7 @@
         </v-layout>
       </v-tab-item>
 
-      <v-tab ripple>this is tab</v-tab>
+      <v-tab ripple>Game</v-tab>
 
       <v-tab-item lazy>
         <Score/>
